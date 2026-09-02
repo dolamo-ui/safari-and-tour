@@ -647,8 +647,8 @@ export default function AboutPage() {
               focused team that handles everything from permits to pacing.
             </p>
             <p>
-              We&apos;re based in Sebokeng, Gauteng, but our routes run from the
-              Drakensberg to Victoria Falls. The common thread across every trip
+              We&apos;re based at 1717 Kingfisher Street in Marloth Park, next to
+              Kruger National Park, but our routes run from the Drakensberg to Victoria Falls. The common thread across every trip
               is the same: local expertise, transparent costs, and the kind of
               guiding that only comes from years on the road.
             </p>
@@ -965,7 +965,7 @@ export default function AboutPage() {
             <h4>CONTACT</h4>
             <span>079 644 5310</span>
             <span>info@malikantours.co.za</span>
-            <span>20323 Zone 14, Sebokeng, 1983</span>
+            <span>1717 Kingfisher Street, Marloth Park<br />Kruger National Park</span>
           </div>
         </div>
         <div className="wrap footer-bottom">

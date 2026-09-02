@@ -850,7 +850,7 @@ export default function Page() {
       <a href="tel:0796445310">Call us anytime<b>079 644 5310</b></a>
       <a href="mailto:info@malikantours.co.za">Email<b>info@malikantours.co.za</b></a>
       <span>Office hours<b>Mon – Fri, 9am – 5pm</b></span>
-      <span>Based in<b>Sebokeng, Gauteng</b></span>
+      <span>Based in<b>Marloth Park, Kruger National Park</b></span>
     </div>
   </div>
 </section>
@@ -882,7 +882,7 @@ export default function Page() {
       <h4>CONTACT</h4>
       <span>079 644 5310</span>
       <span>info@malikantours.co.za</span>
-      <span>20323 Zone 14, Sebokeng, 1983</span>
+      <span>1717 Kingfisher Street, Marloth Park<br />Kruger National Park</span>
     </div>
   </div>
   <div className="wrap footer-bottom">

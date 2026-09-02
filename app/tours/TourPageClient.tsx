@@ -1152,7 +1152,7 @@ export default function TourPageClient() {
               Office hours<b>Mon – Fri, 9am – 5pm</b>
             </span>
             <span>
-              Based in<b>Sebokeng, Gauteng</b>
+              Based in<b>Marloth Park, Kruger National Park</b>
             </span>
           </div>
         </div>
@@ -1198,7 +1198,7 @@ export default function TourPageClient() {
             <h4>CONTACT</h4>
             <span>079 644 5310</span>
             <span>info@malikantours.co.za</span>
-            <span>20323 Zone 14, Sebokeng, 1983</span>
+            <span>1717 Kingfisher Street, Marloth Park<br />Kruger National Park</span>
           </div>
         </div>
         <div className="wrap footer-bottom">

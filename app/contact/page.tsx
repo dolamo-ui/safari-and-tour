@@ -329,8 +329,8 @@ export default function ContactPage() {
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
           </div>
           <div className="contact-info">
-            <h4>Location</h4>
-            <p>20323 Zone 14, Sebokeng, 1983<br />Gauteng, South Africa</p>
+            <h4>Marloth Park - Branch</h4>
+            <p>1717 Kingfisher Street, Marloth Park<br />Kruger National Park, South Africa</p>
           </div>
         </div>
 
@@ -394,11 +394,11 @@ export default function ContactPage() {
 <section className="map-section">
   <iframe
     className="map-frame"
-    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3578.1234567890123!2d27.856789!3d-26.567890!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjbCsDM0JzA0LjQiUyAyN8KwNTEnMjQuNCJF!5e0!3m2!1sen!2sza!4v1699999999999!5m2!1sen!2sza"
+    src="https://www.google.com/maps?q=1717+Kingfisher+Street,+Marloth+Park,+Kruger+National+Park&output=embed"
     allowFullScreen
     loading="lazy"
     referrerPolicy="no-referrer-when-downgrade"
-    title="Malikan Tours office location in Sebokeng, Gauteng"
+    title="Malikan Tours branch location in Marloth Park, Kruger National Park"
   ></iframe>
 </section>
 
@@ -459,7 +459,7 @@ export default function ContactPage() {
       <h4>CONTACT</h4>
       <a href="tel:0796445310">079 644 5310</a>
       <a href="mailto:info@malikantours.co.za">info@malikantours.co.za</a>
-      <span>20323 Zone 14, Sebokeng, 1983</span>
+      <span>1717 Kingfisher Street, Marloth Park<br />Kruger National Park</span>
     </div>
   </div>
   <div className="wrap footer-bottom">

@@ -457,7 +457,7 @@ export default function BookingPage() {
             <h4>CONTACT</h4>
             <span>079 644 5310</span>
             <span>info@malikantours.co.za</span>
-            <span>20323 Zone 14, Sebokeng, 1983</span>
+            <span>1717 Kingfisher Street, Marloth Park<br />Kruger National Park</span>
           </div>
         </div>
         <div className="wrap footer-bottom">
