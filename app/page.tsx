@@ -219,7 +219,7 @@ export default function Page() {
           <a href="https://facebook.com/SitePad" target="_blank" rel="noopener noreferrer" aria-label="facebook" className="w-7 h-7 rounded-full flex items-center justify-center bg-[#C9A227]/10 border border-[#C9A227]/30 text-[#C9A227] hover:bg-[#C9A227] hover:text-[#14110B] transition-all duration-300 hover:scale-110">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
           </a>
-          <a href="https://www.instagram.com/explore/tags/sitepad/" target="_blank" rel="noopener noreferrer" aria-label="instagram" className="w-7 h-7 rounded-full flex items-center justify-center bg-[#C9A227]/10 border border-[#C9A227]/30 text-[#C9A227] hover:bg-[#C9A227] hover:text-[#14110B] transition-all duration-300 hover:scale-110">
+          <a href="https://www.instagram.com/malikan_tours?igsi=YzMzMDh5M3R4a3V3&utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="instagram" className="w-7 h-7 rounded-full flex items-center justify-center bg-[#C9A227]/10 border border-[#C9A227]/30 text-[#C9A227] hover:bg-[#C9A227] hover:text-[#14110B] transition-all duration-300 hover:scale-110">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
           </a>
           <a href="https://x.com/sitepad_editor" target="_blank" rel="noopener noreferrer" aria-label="twitter" className="w-7 h-7 rounded-full flex items-center justify-center bg-[#C9A227]/10 border border-[#C9A227]/30 text-[#C9A227] hover:bg-[#C9A227] hover:text-[#14110B] transition-all duration-300 hover:scale-110">
@@ -652,7 +652,7 @@ export default function Page() {
     <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px', marginBottom: '40px'}}>
       {/* Gallery Item 1 */}
       <div className="reveal" style={{position: 'relative', aspectRatio: '1', overflow: 'hidden', borderRadius: '4px', cursor: 'pointer'}} onMouseOver={(e) => { e.currentTarget.querySelector('img').style.transform='scale(1.12)'; e.currentTarget.querySelector('[data-overlay]').style.opacity='1'; }} onMouseOut={(e) => { e.currentTarget.querySelector('img').style.transform='scale(1)'; e.currentTarget.querySelector('[data-overlay]').style.opacity='0'; }}>
-        <img src="/gallery.jpg" alt="Safari game drive with wildlife" style={{width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .6s cubic-bezier(.2,.8,.2,1)'}} />
+        <img src="https://i.imgur.com/80qoAL9.jpeg" alt="Safari game drive with wildlife" style={{width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .6s cubic-bezier(.2,.8,.2,1)'}} />
         <div data-overlay style={{position: 'absolute', inset: '0', background: 'linear-gradient(135deg, rgba(169,121,28,.85), rgba(20,17,11,.75))', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px', opacity: '0', transition: 'opacity .4s'}} >
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect width="15" height="15" x="1" y="5" rx="2" ry="2"/></svg>
           <span style={{color: '#fff', fontSize: '.85rem', fontWeight: '600', letterSpacing: '.04em'}}>GAME DRIVE</span>
@@ -661,7 +661,7 @@ export default function Page() {
 
       {/* Gallery Item 2 */}
       <div className="reveal" style={{position: 'relative', aspectRatio: '1', overflow: 'hidden', borderRadius: '4px', cursor: 'pointer'}} onMouseOver={(e) => { e.currentTarget.querySelector('img').style.transform='scale(1.12)'; e.currentTarget.querySelector('[data-overlay]').style.opacity='1'; }} onMouseOut={(e) => { e.currentTarget.querySelector('img').style.transform='scale(1)'; e.currentTarget.querySelector('[data-overlay]').style.opacity='0'; }}>
-        <img src="/gallery1.jpg" alt="Vineyard experience in Cape Winelands" style={{width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .6s cubic-bezier(.2,.8,.2,1)'}} />
+        <img src="https://i.imgur.com/qO2TVtv.jpeg" alt="Vineyard experience in Cape Winelands" style={{width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .6s cubic-bezier(.2,.8,.2,1)'}} />
         <div data-overlay style={{position: 'absolute', inset: '0', background: 'linear-gradient(135deg, rgba(169,121,28,.85), rgba(20,17,11,.75))', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px', opacity: '0', transition: 'opacity .4s'}}>
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9c0-1 1-2 2-2s2 1 2 2-1 2-2 2-2-1-2-2z"/><path d="M9 22H4c-1 0-2-1-2-2V6c0-1 1-2 2-2h16c1 0 2 1 2 2v10"/></svg>
           <span style={{color: '#fff', fontSize: '.85rem', fontWeight: '600', letterSpacing: '.04em'}}>WINE TASTING</span>
@@ -670,7 +670,7 @@ export default function Page() {
 
       {/* Gallery Item 3 */}
       <div className="reveal" style={{position: 'relative', aspectRatio: '1', overflow: 'hidden', borderRadius: '4px', cursor: 'pointer'}} onMouseOver={(e) => { e.currentTarget.querySelector('img').style.transform='scale(1.12)'; e.currentTarget.querySelector('[data-overlay]').style.opacity='1'; }} onMouseOut={(e) => { e.currentTarget.querySelector('img').style.transform='scale(1)'; e.currentTarget.querySelector('[data-overlay]').style.opacity='0'; }}>
-        <img src="/gallery2.jpg" alt="Mountain hiking adventure in Drakensberg" style={{width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .6s cubic-bezier(.2,.8,.2,1)'}} />
+        <img src="https://i.imgur.com/4P6ffba.jpeg" alt="Mountain hiking adventure in Drakensberg" style={{width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .6s cubic-bezier(.2,.8,.2,1)'}} />
         <div data-overlay style={{position: 'absolute', inset: '0', background: 'linear-gradient(135deg, rgba(169,121,28,.85), rgba(20,17,11,.75))', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px', opacity: '0', transition: 'opacity .4s'}}>
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 10.26 24 12.52 18 17.74 19.54 26.87 12 23.13 4.46 26.87 6 17.74 0 12.52 8.91 10.26 12 2"/></svg>
           <span style={{color: '#fff', fontSize: '.85rem', fontWeight: '600', letterSpacing: '.04em'}}>MOUNTAIN TREK</span>
@@ -679,7 +679,7 @@ export default function Page() {
 
       {/* Gallery Item 4 */}
       <div className="reveal" style={{position: 'relative', aspectRatio: '1', overflow: 'hidden', borderRadius: '4px', cursor: 'pointer'}} onMouseOver={(e) => { e.currentTarget.querySelector('img').style.transform='scale(1.12)'; e.currentTarget.querySelector('[data-overlay]').style.opacity='1'; }} onMouseOut={(e) => { e.currentTarget.querySelector('img').style.transform='scale(1)'; e.currentTarget.querySelector('[data-overlay]').style.opacity='0'; }}>
-        <img src="/gallery3.jpg" alt="Cultural township experience" style={{width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .6s cubic-bezier(.2,.8,.2,1)'}} />
+        <img src="https://i.imgur.com/2JKDyzZ.jpeg" alt="Cultural township experience" style={{width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .6s cubic-bezier(.2,.8,.2,1)'}} />
         <div data-overlay style={{position: 'absolute', inset: '0', background: 'linear-gradient(135deg, rgba(169,121,28,.85), rgba(20,17,11,.75))', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px', opacity: '0', transition: 'opacity .4s'}}>
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
           <span style={{color: '#fff', fontSize: '.85rem', fontWeight: '600', letterSpacing: '.04em'}}>CULTURAL TOUR</span>
@@ -688,7 +688,7 @@ export default function Page() {
 
       {/* Gallery Item 5 */}
       <div className="reveal" style={{position: 'relative', aspectRatio: '1', overflow: 'hidden', borderRadius: '4px', cursor: 'pointer'}} onMouseOver={(e) => { e.currentTarget.querySelector('img').style.transform='scale(1.12)'; e.currentTarget.querySelector('[data-overlay]').style.opacity='1'; }} onMouseOut={(e) => { e.currentTarget.querySelector('img').style.transform='scale(1)'; e.currentTarget.querySelector('[data-overlay]').style.opacity='0'; }}>
-        <img src="/gallery4.jpg" alt="Sunset view from accommodation" style={{width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .6s cubic-bezier(.2,.8,.2,1)'}} />
+        <img src="https://i.imgur.com/yQqkQDj.jpeg" alt="Sunset view from accommodation" style={{width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .6s cubic-bezier(.2,.8,.2,1)'}} />
         <div data-overlay style={{position: 'absolute', inset: '0', background: 'linear-gradient(135deg, rgba(169,121,28,.85), rgba(20,17,11,.75))', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px', opacity: '0', transition: 'opacity .4s'}}>
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
           <span style={{color: '#fff', fontSize: '.85rem', fontWeight: '600', letterSpacing: '.04em'}}>GOLDEN HOUR</span>
@@ -697,7 +697,7 @@ export default function Page() {
 
       {/* Gallery Item 6 */}
       <div className="reveal" style={{position: 'relative', aspectRatio: '1', overflow: 'hidden', borderRadius: '4px', cursor: 'pointer'}} onMouseOver={(e) => { e.currentTarget.querySelector('img').style.transform='scale(1.12)'; e.currentTarget.querySelector('[data-overlay]').style.opacity='1'; }} onMouseOut={(e) => { e.currentTarget.querySelector('img').style.transform='scale(1)'; e.currentTarget.querySelector('[data-overlay]').style.opacity='0'; }}>
-        <img src="/gallery5.jpg" alt="Adventure landscape moment" style={{width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .6s cubic-bezier(.2,.8,.2,1)'}} />
+        <img src="https://i.imgur.com/lHBwSvH.jpeg" alt="Adventure landscape moment" style={{width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .6s cubic-bezier(.2,.8,.2,1)'}} />
         <div data-overlay style={{position: 'absolute', inset: '0', background: 'linear-gradient(135deg, rgba(169,121,28,.85), rgba(20,17,11,.75))', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px', opacity: '0', transition: 'opacity .4s'}}>
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
           <span style={{color: '#fff', fontSize: '.85rem', fontWeight: '600', letterSpacing: '.04em'}}>LANDSCAPE</span>
@@ -706,7 +706,7 @@ export default function Page() {
 
       {/* Gallery Item 7 */}
       <div className="reveal" style={{position: 'relative', aspectRatio: '1', overflow: 'hidden', borderRadius: '4px', cursor: 'pointer'}} onMouseOver={(e) => { e.currentTarget.querySelector('img').style.transform='scale(1.12)'; e.currentTarget.querySelector('[data-overlay]').style.opacity='1'; }} onMouseOut={(e) => { e.currentTarget.querySelector('img').style.transform='scale(1)'; e.currentTarget.querySelector('[data-overlay]').style.opacity='0'; }}>
-        <img src="/gallery6.jpg" alt="Local community interaction" style={{width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .6s cubic-bezier(.2,.8,.2,1)'}} />
+        <img src="https://i.imgur.com/ZG6z4V9.jpeg" alt="Local community interaction" style={{width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .6s cubic-bezier(.2,.8,.2,1)'}} />
         <div data-overlay style={{position: 'absolute', inset: '0', background: 'linear-gradient(135deg, rgba(169,121,28,.85), rgba(20,17,11,.75))', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px', opacity: '0', transition: 'opacity .4s'}}>
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 19a6 6 0 0 0-12 0"/><circle cx="8" cy="9" r="4"/><path d="M22 19a6 6 0 0 0-6-6 4 4 0 1 0 0-8"/></svg>
           <span style={{color: '#fff', fontSize: '.85rem', fontWeight: '600', letterSpacing: '.04em'}}>EXPERIENCE</span>
@@ -715,7 +715,7 @@ export default function Page() {
 
       {/* Gallery Item 8 */}
       <div className="reveal" style={{position: 'relative', aspectRatio: '1', overflow: 'hidden', borderRadius: '4px', cursor: 'pointer'}} onMouseOver={(e) => { e.currentTarget.querySelector('img').style.transform='scale(1.12)'; e.currentTarget.querySelector('[data-overlay]').style.opacity='1'; }} onMouseOut={(e) => { e.currentTarget.querySelector('img').style.transform='scale(1)'; e.currentTarget.querySelector('[data-overlay]').style.opacity='0'; }}>
-        <img src="/gallery7.jpg" alt="Nature and wildlife showcase" style={{width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .6s cubic-bezier(.2,.8,.2,1)'}} />
+        <img src="https://i.imgur.com/lD5GarR.jpeg" alt="Nature and wildlife showcase" style={{width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .6s cubic-bezier(.2,.8,.2,1)'}} />
         <div data-overlay style={{position: 'absolute', inset: '0', background: 'linear-gradient(135deg, rgba(169,121,28,.85), rgba(20,17,11,.75))', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px', opacity: '0', transition: 'opacity .4s'}}>
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
           <span style={{color: '#fff', fontSize: '.85rem', fontWeight: '600', letterSpacing: '.04em'}}>WILDLIFE</span>
@@ -726,7 +726,7 @@ export default function Page() {
 
     <div className="reveal" style={{textAlign: 'center'}}>
       <p style={{color: 'var(--ink-dim)', fontSize: '.95rem', marginBottom: '24px'}}>Follow us on Instagram for daily updates and real-time travel moments</p>
-      <a href="https://www.instagram.com/explore/tags/sitepad/" target="_blank" style={{display: 'inline-flex', alignItems: 'center', gap: '.6em', padding: '1.1em 2em', border: '2px solid var(--gold)', background: 'transparent', color: 'var(--gold)', fontFamily: 'var(--sans)', fontWeight: '600', fontSize: '.95rem', textDecoration: 'none', borderRadius: '2px', transition: 'all .35s cubic-bezier(.2,.8,.2,1)'}} onMouseOver={(e) => { e.currentTarget.style.backgroundColor='var(--gold)'; e.currentTarget.style.color='#fff'; e.currentTarget.style.transform='translateY(-2px)'; }} onMouseOut={(e) => { e.currentTarget.style.backgroundColor='transparent'; e.currentTarget.style.color='var(--gold)'; e.currentTarget.style.transform='translateY(0)'; }}>Follow on Instagram <span style={{transition: 'transform .35s cubic-bezier(.2,.8,.2,1)'}}>→</span></a>
+      <a href="https://www.instagram.com/malikan_tours?igsi=YzMzMDh5M3R4a3V3&utm_source=qr" target="_blank" rel="noopener noreferrer" style={{display: 'inline-flex', alignItems: 'center', gap: '.6em', padding: '1.1em 2em', border: '2px solid var(--gold)', background: 'transparent', color: 'var(--gold)', fontFamily: 'var(--sans)', fontWeight: '600', fontSize: '.95rem', textDecoration: 'none', borderRadius: '2px', transition: 'all .35s cubic-bezier(.2,.8,.2,1)'}} onMouseOver={(e) => { e.currentTarget.style.backgroundColor='var(--gold)'; e.currentTarget.style.color='#fff'; e.currentTarget.style.transform='translateY(-2px)'; }} onMouseOut={(e) => { e.currentTarget.style.backgroundColor='transparent'; e.currentTarget.style.color='var(--gold)'; e.currentTarget.style.transform='translateY(0)'; }}>Follow on Instagram <span style={{transition: 'transform .35s cubic-bezier(.2,.8,.2,1)'}}>→</span></a>
     </div>
   </div>
 </section>

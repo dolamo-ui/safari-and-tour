@@ -1,15 +1,55 @@
 // @ts-nocheck
 // NOTE: matches the pattern used on the home page and /tours page — the
-// shared header/drawer/scroll/reveal/testimonial chrome still uses the
-// original vanilla-DOM getElementById + classList approach (kept 1:1 with
-// the source HTML's behavior) rather than React refs/state, which is why
-// type-checking is disabled for this file. The contact form is a plain
-// mailto form, unchanged from source (no client-side state needed).
+// shared header/drawer/scroll/reveal/testimonial chrome still uses the original vanilla-DOM getElementById + classList approach (kept 1:1 with the
+// source HTML's behavior) rather than React refs/state, which is why
+// type-checking is disabled for this file.
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "../lib/firebase"; // adjust path if your firebase.js lives elsewhere
 
 export default function ContactPage() {
+  // ---- Contact form state ----
+  const [formData, setFormData] = useState({ name: "", email: "", phone: "", message: "" });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const value = e.target.name === "phone" ? e.target.value.replace(/\D/g, "") : e.target.value;
+    setFormData((prev) => ({ ...prev, [e.target.name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (submitting) return;
+    setSubmitting(true);
+    setSubmitError("");
+    if (!formData.email.trim().includes("@")) {
+      setSubmitError("Please enter a valid email address containing an @ sign.");
+      setSubmitting(false);
+      return;
+    }
+    try {
+      await addDoc(collection(db, "contactMessages"), {
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone.trim(),
+        message: formData.message.trim(),
+        status: "new", // new | read | resolved
+        createdAt: serverTimestamp(),
+      });
+      setSubmitted(true);
+      setFormData({ name: "", email: "", phone: "", message: "" });
+    } catch (err) {
+      console.error(err);
+      setSubmitError("Something went wrong sending your message. Please try again or email us directly at info@malikantours.co.za.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   useEffect(() => {
     // ---- Nav glass effect on scroll ----
     const nav = document.getElementById("main-nav");
@@ -139,7 +179,6 @@ export default function ContactPage() {
   return (
     <>
 
-
 {/* ==================== HEADER ==================== */}
 <header className="relative z-50">
   {/* Top Info Bar */}
@@ -161,7 +200,7 @@ export default function ContactPage() {
           <a href="https://facebook.com/SitePad" target="_blank" rel="noopener noreferrer" aria-label="facebook" className="w-7 h-7 rounded-full flex items-center justify-center bg-[#C9A227]/10 border border-[#C9A227]/30 text-[#C9A227] hover:bg-[#C9A227] hover:text-[#14110B] transition-all duration-300 hover:scale-110">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
           </a>
-          <a href="https://www.instagram.com/explore/tags/sitepad/" target="_blank" rel="noopener noreferrer" aria-label="instagram" className="w-7 h-7 rounded-full flex items-center justify-center bg-[#C9A227]/10 border border-[#C9A227]/30 text-[#C9A227] hover:bg-[#C9A227] hover:text-[#14110B] transition-all duration-300 hover:scale-110">
+          <a href="https://www.instagram.com/malikan_tours?igsi=YzMzMDh5M3R4a3V3&utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="instagram" className="w-7 h-7 rounded-full flex items-center justify-center bg-[#C9A227]/10 border border-[#C9A227]/30 text-[#C9A227] hover:bg-[#C9A227] hover:text-[#14110B] transition-all duration-300 hover:scale-110">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
           </a>
           <a href="https://x.com/sitepad_editor" target="_blank" rel="noopener noreferrer" aria-label="twitter" className="w-7 h-7 rounded-full flex items-center justify-center bg-[#C9A227]/10 border border-[#C9A227]/30 text-[#C9A227] hover:bg-[#C9A227] hover:text-[#14110B] transition-all duration-300 hover:scale-110">
@@ -362,29 +401,54 @@ export default function ContactPage() {
         </div>
       </div>
 
-      {/* Contact Form */}
+      {/* Contact Form — now saves to Firestore */}
       <div className="contact-form-wrap reveal">
-        <h3>Send us a message</h3>
-        <p>Fill in the form below and we&apos;ll get back to you within 24 hours.</p>
-        <form action="mailto:info@malikantours.co.za" method="post" encType="text/plain">
-          <div className="form-group">
-            <label htmlFor="name">Full Name</label>
-            <input type="text" id="name" name="name" placeholder="Your full name" required />
+        {submitted ? (
+          <div style={{textAlign: 'center', padding: '48px 24px'}}>
+            <div style={{width: '64px', height: '64px', margin: '0 auto 20px', borderRadius: '50%', background: 'rgba(34,197,94,.12)', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <h3 style={{fontFamily: 'var(--serif)', fontWeight: 400, fontSize: '1.5rem', color: 'var(--ink)', margin: '0 0 10px'}}>Message sent!</h3>
+            <p style={{color: 'var(--ink-dim)', margin: '0 0 24px'}}>Thank you for reaching out. We&apos;ll get back to you within 24 hours.</p>
+            <button
+              type="button"
+              onClick={() => setSubmitted(false)}
+              style={{padding: '12px 28px', border: '1px solid var(--gold)', background: 'transparent', color: 'var(--gold)', fontWeight: 600, cursor: 'pointer', borderRadius: '2px', letterSpacing: '.05em', textTransform: 'uppercase', fontSize: '.8rem'}}
+            >
+              Send another message
+            </button>
           </div>
-          <div className="form-group">
-            <label htmlFor="email">Email Address</label>
-            <input type="email" id="email" name="email" placeholder="you@example.com" required />
-          </div>
-          <div className="form-group">
-            <label htmlFor="phone">Phone Number</label>
-            <input type="tel" id="phone" name="phone" placeholder="+27 XX XXX XXXX" />
-          </div>
-          <div className="form-group">
-            <label htmlFor="message">Your Message</label>
-            <textarea id="message" name="message" placeholder="Tell us about your trip idea, preferred dates, group size, and any special requests..." required></textarea>
-          </div>
-          <button type="submit" className="form-submit">Send Message <span>→</span></button>
-        </form>
+        ) : (
+          <>
+            <h3>Send us a message</h3>
+            <p>Fill in the form below and we&apos;ll get back to you within 24 hours.</p>
+            <form onSubmit={handleSubmit}>
+              <p style={{ marginBottom: "24px" }}><strong>Fields marked with * are required</strong></p>
+              <div className="form-group">
+                <label htmlFor="name">Full Name *</label>
+                <input type="text" id="name" name="name" placeholder="Your full name" value={formData.name} onChange={handleChange} required />
+              </div>
+              <div className="form-group">
+                <label htmlFor="email">Email Address *</label>
+                <input type="email" id="email" name="email" placeholder="you@example.com" value={formData.email} onChange={handleChange} required />
+              </div>
+              <div className="form-group">
+                <label htmlFor="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" inputMode="numeric" pattern="[0-9]*" placeholder="0796445310" value={formData.phone} onChange={handleChange} />
+              </div>
+              <div className="form-group">
+                <label htmlFor="message">Your Message *</label>
+                <textarea id="message" name="message" placeholder="Tell us about your trip idea, preferred dates, group size, and any special requests..." value={formData.message} onChange={handleChange} required></textarea>
+              </div>
+              {submitError && (
+                <p style={{color: '#c32626', fontSize: '.85rem', margin: '0 0 12px'}}>{submitError}</p>
+              )}
+              <button type="submit" className="form-submit" disabled={submitting} style={{opacity: submitting ? 0.7 : 1, cursor: submitting ? 'wait' : 'pointer'}}>
+                {submitting ? "Sending…" : <>Send Message <span>→</span></>}
+              </button>
+            </form>
+          </>
+        )}
       </div>
     </div>
   </div>

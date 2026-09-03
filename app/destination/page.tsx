@@ -242,7 +242,7 @@ export default function DestinationsPage() {
                   </svg>
                 </a>
                 <a
-                  href="https://www.instagram.com/explore/tags/sitepad/"
+                  href="https://www.instagram.com/malikan_tours?igsi=YzMzMDh5M3R4a3V3&utm_source=qr"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="instagram"

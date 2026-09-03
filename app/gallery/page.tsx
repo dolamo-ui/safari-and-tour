@@ -6,67 +6,60 @@ import Link from "next/link";
 /* ─── Data ─── */
 const galleryItems = [
   {
-    src: "/hero.jpg",
+    src: "https://i.imgur.com/80qoAL9.jpeg",
     alt: "Kruger sunrise over the savanna",
     label: "Kruger Sunrise",
     caption: "Kruger Sunrise — Early morning light over the central savanna",
     span: "span-2",
   },
   {
-    src: "/gallery.jpg",
+    src: "https://i.imgur.com/qO2TVtv.jpeg",
     alt: "Elephant herd at a waterhole",
     label: "Elephant Encounter",
     caption: "Elephant Encounter — A breeding herd at a remote waterhole",
     span: "",
   },
   {
-    src: "/gallery1.jpg",
+    src: "https://i.imgur.com/4P6ffba.jpeg",
     alt: "Lion resting in golden grass",
     label: "Lion at Dusk",
     caption: "Lion at Dusk — Resting in golden grass after the heat of the day",
     span: "",
   },
   {
-    src: "/gallery2.jpg",
+    src: "https://i.imgur.com/2JKDyzZ.jpeg",
     alt: "Bushveld lodge at dusk",
     label: "Lodge Evenings",
     caption: "Lodge Evenings — The bushveld lodge at dusk, lanterns lit",
     span: "",
   },
   {
-    src: "/gallery3.jpg",
+    src: "https://i.imgur.com/yQqkQDj.jpeg",
     alt: "Leopard in a tree",
     label: "Leopard Sighting",
     caption: "Leopard Sighting — Spotted high in a marula tree at sunset",
     span: "span-2-both",
   },
   {
-    src: "/gallery4.jpg",
+    src: "https://i.imgur.com/lHBwSvH.jpeg",
     alt: "Sundowner drinks at sunset",
     label: "Sundowners",
     caption: "Sundowners — Drinks as the light turns amber over the plains",
     span: "",
   },
   {
-    src: "/gallery5.jpg",
+    src: "https://i.imgur.com/ZG6z4V9.jpeg",
     alt: "Guide tracking wildlife on foot",
     label: "On Foot",
     caption: "On Foot — Tracking signs with an experienced field guide",
     span: "span-2",
   },
   {
-    src: "/gallery6.jpg",
+    src: "https://i.imgur.com/lD5GarR.jpeg",
     alt: "Cultural experience with local community",
     label: "Cultural Roots",
     caption: "Cultural Roots — Sharing stories with the Basotho community",
     span: "",
-  },
-  {
-    src: "/gallery7.jpg",
-    alt: "Panoramic view of the bushveld",
-    label: "Endless Horizons",
-    caption: "Endless Horizons — The view from Gods Window, Mpumalanga",
-    span: "span-2-row",
   },
 ];
 
@@ -254,7 +247,7 @@ export default function GalleryPage() {
                     ),
                   },
                   {
-                    href: "https://www.instagram.com/explore/tags/sitepad/",
+                    href: "https://www.instagram.com/malikan_tours?igsi=YzMzMDh5M3R4a3V3&utm_source=qr",
                     label: "instagram",
                     svg: (
                       <>
@@ -780,7 +773,7 @@ export default function GalleryPage() {
         className="site-footer"
         style={{
           backgroundImage:
-            "linear-gradient(135deg, rgba(20,17,11,.92), rgba(20,17,11,.88)), url('/gallery7.jpg')",
+            "linear-gradient(135deg, rgba(20,17,11,.92), rgba(20,17,11,.88)), url('https://i.imgur.com/lD5GarR.jpeg')",
           backgroundPosition: "center",
           backgroundSize: "cover",
           backgroundAttachment: "fixed",

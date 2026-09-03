@@ -1,17 +1,23 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "../lib/firebase";
 
 const GALLERY_IMAGES = [
-  { src: "/accomodation1.jpg", alt: "Accommodation view 1" },
-  { src: "/accomodation2.jpg", alt: "Accommodation view 2" },
-  { src: "/accomodation3.jpg", alt: "Accommodation view 3" },
-  { src: "/accomodation4.jpg", alt: "Accommodation view 4" },
-  { src: "/accomodation5.jpg", alt: "Accommodation view 5" },
-  { src: "/accomodation6.jpg", alt: "Accommodation view 6" },
-  { src: "/accomodation7.jpg", alt: "Accommodation view 7" },
-  { src: "/accomodation8.jpg", alt: "Accommodation view 8" },
-  { src: "/accomodation9.jpg", alt: "Accommodation view 9" },
+  { src: "https://i.imgur.com/TkFaURA.jpeg", alt: "Accommodation view 1" },
+  { src: "https://i.imgur.com/yr6A6Pw.jpeg", alt: "Accommodation view 2" },
+  { src: "https://i.imgur.com/V0wJuzT.jpeg", alt: "Accommodation view 3" },
+  { src: "https://i.imgur.com/UCJFTqQ.jpeg", alt: "Accommodation view 4" },
+  { src: "https://i.imgur.com/7zrNp0R.jpeg", alt: "Accommodation view 5" },
+  { src: "https://i.imgur.com/WTaW2Ul.jpeg", alt: "Accommodation view 6" },
+  { src: "https://i.imgur.com/kG2SGAy.jpeg", alt: "Accommodation view 7" },
+  { src: "https://i.imgur.com/2FAocAj.jpeg", alt: "Accommodation view 8" },
+  { src: "https://i.imgur.com/asOSJQC.jpeg", alt: "Accommodation view 9" },
+  { src: "https://i.imgur.com/ewoAeE7.jpeg", alt: "Accommodation view 10" },
+  { src: "https://i.imgur.com/mweEwdo.jpeg", alt: "Accommodation view 11" },
+  { src: "https://i.imgur.com/DJtReuI.jpeg", alt: "Accommodation view 12" },
+  { src: "https://i.imgur.com/hFZIXDL.jpeg", alt: "Accommodation view 13" },
 ];
 
 const FEATURES = [
@@ -59,12 +65,27 @@ const FEATURES = [
   },
 ];
 
+const accomPrices: Record<string, number> = {
+  tented: 2500,
+  lodge: 4500,
+  group: 1800,
+};
+
+const accomLabels: Record<string, string> = {
+  tented: "Tented Camp — Kruger",
+  lodge: "Safari Lodge",
+  group: "Group Booking",
+};
+
 export default function AccommodationPage() {
   const checkinRef = useRef<HTMLInputElement>(null);
   const checkoutRef = useRef<HTMLInputElement>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const [refNum, setRefNum] = useState("0000");
 
   useEffect(() => {
-    // ---- Reveal-on-scroll ----
     const revealEls = document.querySelectorAll(".reveal");
     let io: IntersectionObserver | undefined;
     if ("IntersectionObserver" in window) {
@@ -84,7 +105,6 @@ export default function AccommodationPage() {
       revealEls.forEach((el) => el.classList.add("is-visible"));
     }
 
-    // ---- Minimum date for check-in / check-out ----
     const today = new Date().toISOString().split("T")[0];
     const checkin = checkinRef.current;
     const checkout = checkoutRef.current;
@@ -106,10 +126,75 @@ export default function AccommodationPage() {
     };
   }, []);
 
-  function handleBookingSubmit(e: React.FormEvent<HTMLFormElement>) {
+  const handleBookingSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    alert("Thank you! We will contact you shortly to confirm your booking.");
-  }
+    setSubmitError("");
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const checkIn = formData.get("checkin") as string;
+    const checkOut = formData.get("checkout") as string;
+    const guests = parseInt(formData.get("guests") as string) || 1;
+    const accomType = formData.get("accom-type") as string;
+    const fullName = formData.get("fullname") as string;
+    const email = formData.get("email") as string;
+    const phone = formData.get("phone") as string;
+    const requests = formData.get("requests") as string;
+
+    if (!checkIn || !checkOut || !accomType || !fullName || !email || !phone) {
+      setSubmitError("Please fill in all required fields.");
+      return;
+    }
+    if (!email.includes("@")) {
+      setSubmitError("Please enter a valid email address containing an @ sign.");
+      return;
+    }
+
+    const newRef = String(Math.floor(1000 + Math.random() * 9000));
+    const pricePerNight = accomPrices[accomType] || 0;
+    const nights = Math.max(
+      1,
+      Math.ceil((new Date(checkOut).getTime() - new Date(checkIn).getTime()) / (1000 * 60 * 60 * 24))
+    );
+    const estimatedTotal = pricePerNight * nights * guests;
+
+    setIsSubmitting(true);
+    try {
+      await addDoc(collection(db, "accommodationBookings"), {
+        reference: `AC-${newRef}`,
+        checkIn,
+        checkOut,
+        nights,
+        guests,
+        accomType,
+        accomTypeLabel: accomLabels[accomType] || accomType,
+        pricePerNight,
+        estimatedTotal,
+        customerName: fullName,
+        customerEmail: email,
+        customerPhone: phone,
+        specialRequests: requests,
+        status: "pending",
+        createdAt: serverTimestamp(),
+      });
+
+      setRefNum(newRef);
+      setSubmitted(true);
+      form.reset();
+    } catch (err) {
+      console.error(err);
+      setSubmitError("Something went wrong saving your booking. Please try again or call 079 644 5310.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const summaryCheckIn = checkinRef.current?.value
+    ? new Date(checkinRef.current.value).toLocaleDateString("en-ZA", { day: "numeric", month: "long", year: "numeric" })
+    : "—";
+  const summaryCheckOut = checkoutRef.current?.value
+    ? new Date(checkoutRef.current.value).toLocaleDateString("en-ZA", { day: "numeric", month: "long", year: "numeric" })
+    : "—";
 
   return (
     <>
@@ -206,60 +291,101 @@ export default function AccommodationPage() {
             <h2 className="h-section" style={{ marginTop: "14px" }}>Reserve your spot in the wild.</h2>
             <p className="lede" style={{ marginTop: "18px", marginInline: "auto", color: "var(--ink-on-dark-dim)" }}>Tell us when and for how long — we'll handle the rest.</p>
           </div>
-          <div className="accom-booking-form reveal">
-            <form onSubmit={handleBookingSubmit}>
-              <div className="accom-form-row">
-                <div className="accom-form-group">
-                  <label htmlFor="checkin">Check-in Date</label>
-                  <input ref={checkinRef} type="date" id="checkin" name="checkin" required />
+
+          {!submitted ? (
+            <div className="accom-booking-form reveal">
+              <form onSubmit={handleBookingSubmit}>
+                <p style={{ marginBottom: "24px", color: "var(--ink-on-dark-dim)", fontSize: ".88rem" }}><strong>Fields marked with * are required</strong></p>
+                <div className="accom-form-row">
+                  <div className="accom-form-group">
+                    <label htmlFor="checkin">Check-in Date *</label>
+                    <input ref={checkinRef} type="date" id="checkin" name="checkin" required />
+                  </div>
+                  <div className="accom-form-group">
+                    <label htmlFor="checkout">Check-out Date *</label>
+                    <input ref={checkoutRef} type="date" id="checkout" name="checkout" required />
+                  </div>
+                </div>
+                <div className="accom-form-row">
+                  <div className="accom-form-group">
+                    <label htmlFor="guests">Number of Guests *</label>
+                    <select id="guests" name="guests" required defaultValue="">
+                      <option value="" disabled>Select guests</option>
+                      <option value="1">1 Guest</option>
+                      <option value="2">2 Guests</option>
+                      <option value="3">3 Guests</option>
+                      <option value="4">4 Guests</option>
+                      <option value="5">5 Guests</option>
+                      <option value="6">6 Guests</option>
+                      <option value="7">7 Guests</option>
+                      <option value="8">8 Guests</option>
+                    </select>
+                  </div>
+                  <div className="accom-form-group">
+                    <label htmlFor="accom-type">Accommodation Type *</label>
+                    <select id="accom-type" name="accom-type" required defaultValue="">
+                      <option value="" disabled>Select type</option>
+                      <option value="tented">Tented Camp — Kruger</option>
+                      <option value="lodge">Safari Lodge</option>
+                      <option value="group">Group Booking</option>
+                    </select>
+                  </div>
                 </div>
                 <div className="accom-form-group">
-                  <label htmlFor="checkout">Check-out Date</label>
-                  <input ref={checkoutRef} type="date" id="checkout" name="checkout" required />
-                </div>
-              </div>
-              <div className="accom-form-row">
-                <div className="accom-form-group">
-                  <label htmlFor="guests">Number of Guests</label>
-                  <select id="guests" name="guests" required defaultValue="">
-                    <option value="" disabled>Select guests</option>
-                    <option value="1">1 Guest</option>
-                    <option value="2">2 Guests</option>
-                    <option value="3">3 Guests</option>
-                    <option value="4">4 Guests</option>
-                    <option value="5">5 Guests</option>
-                    <option value="6+">6+ Guests</option>
-                  </select>
+                  <label htmlFor="fullname">Full Name *</label>
+                  <input type="text" id="fullname" name="fullname" placeholder="Your full name" required />
                 </div>
                 <div className="accom-form-group">
-                  <label htmlFor="accom-type">Accommodation Type</label>
-                  <select id="accom-type" name="accom-type" required defaultValue="">
-                    <option value="" disabled>Select type</option>
-                    <option value="tented">Tented Camp — Kruger</option>
-                    <option value="lodge">Safari Lodge</option>
-                    <option value="group">Group Booking</option>
-                  </select>
+                  <label htmlFor="email">Email Address *</label>
+                  <input type="email" id="email" name="email" placeholder="you@example.com" required />
+                </div>
+                <div className="accom-form-group">
+                  <label htmlFor="phone">Phone Number *</label>
+                  <input type="tel" id="phone" name="phone" inputMode="numeric" pattern="[0-9]*" placeholder="0796445310" onInput={(e) => { e.currentTarget.value = e.currentTarget.value.replace(/\D/g, ""); }} required />
+                </div>
+                <div className="accom-form-group">
+                  <label htmlFor="requests">Special Requests</label>
+                  <input type="text" id="requests" name="requests" placeholder="Dietary requirements, accessibility needs, etc." />
+                </div>
+
+                {submitError && (
+                  <p style={{ color: "#fca5a5", fontSize: ".9rem", marginBottom: "16px" }} role="alert">{submitError}</p>
+                )}
+
+                <button type="submit" className="accom-booking-submit" disabled={isSubmitting}>
+                  {isSubmitting ? "Sending…" : <>Book Now <span style={{ marginLeft: "6px" }}>→</span></>}
+                </button>
+              </form>
+            </div>
+          ) : (
+            <div className="accom-booking-form reveal" style={{ textAlign: "center" }}>
+              <div style={{ width: "72px", height: "72px", borderRadius: "50%", background: "rgba(169,121,28,.10)", border: "2px solid var(--gold)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px" }}>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+              </div>
+              <h3 className="h-display" style={{ color: "#fff", fontSize: "clamp(1.4rem, 3vw, 2rem)" }}>Request received</h3>
+              <p style={{ color: "var(--ink-on-dark-dim)", marginTop: "12px", marginBottom: "24px" }}>
+                Thank you. We'll contact you within 24 hours to confirm your dates and arrange payment.
+              </p>
+              <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid var(--line-dark)", borderRadius: "4px", padding: "24px", maxWidth: "380px", margin: "0 auto 24px", textAlign: "left" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: "1px solid var(--line-dark)", fontSize: ".9rem" }}>
+                  <span style={{ color: "var(--ink-on-dark-dim)" }}>Reference</span>
+                  <span style={{ color: "#fff", fontWeight: 500 }}>AC-{refNum}</span>
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: "1px solid var(--line-dark)", fontSize: ".9rem" }}>
+                  <span style={{ color: "var(--ink-on-dark-dim)" }}>Check-in</span>
+                  <span style={{ color: "#fff", fontWeight: 500 }}>{summaryCheckIn}</span>
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", fontSize: ".9rem" }}>
+                  <span style={{ color: "var(--ink-on-dark-dim)" }}>Check-out</span>
+                  <span style={{ color: "#fff", fontWeight: 500 }}>{summaryCheckOut}</span>
                 </div>
               </div>
-              <div className="accom-form-group">
-                <label htmlFor="fullname">Full Name</label>
-                <input type="text" id="fullname" name="fullname" placeholder="Your full name" required />
+              <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
+                <a href="tel:0796445310" className="btn btn-primary">Call us now <span className="btn-arrow">→</span></a>
+                <button onClick={() => setSubmitted(false)} className="btn btn-ghost on-dark">Make another booking</button>
               </div>
-              <div className="accom-form-group">
-                <label htmlFor="email">Email Address</label>
-                <input type="email" id="email" name="email" placeholder="you@example.com" required />
-              </div>
-              <div className="accom-form-group">
-                <label htmlFor="phone">Phone Number</label>
-                <input type="tel" id="phone" name="phone" placeholder="079 644 5310" required />
-              </div>
-              <div className="accom-form-group">
-                <label htmlFor="requests">Special Requests</label>
-                <input type="text" id="requests" name="requests" placeholder="Dietary requirements, accessibility needs, etc." />
-              </div>
-              <button type="submit" className="accom-booking-submit">Book Now <span style={{ marginLeft: "6px" }}>→</span></button>
-            </form>
-          </div>
+            </div>
+          )}
         </div>
       </section>
 
@@ -285,264 +411,6 @@ export default function AccommodationPage() {
           </div>
         </div>
       </section>
-
-      {/* Page-specific styles moved to globals.css.
-      <style jsx>{`
-        .accom-hero {
-          min-height: 70vh;
-        }
-        .accom-hero :global(.hero-copy h1) {
-          max-width: 16ch;
-        }
-        .accom-hero :global(.hero-copy .lede) {
-          max-width: 52ch;
-        }
-
-        .tented-section {
-          display: grid;
-          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-          gap: 60px;
-          align-items: center;
-        }
-        .tented-image-wrap {
-          position: relative;
-          border-radius: 4px;
-          overflow: hidden;
-          aspect-ratio: 4 / 3;
-          background: linear-gradient(135deg, #14110b, #1d1811);
-          border: 1px solid var(--line);
-        }
-        .tented-image-wrap :global(img) {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-        .tented-image-wrap:hover :global(img) {
-          transform: scale(1.05);
-        }
-        .tented-content :global(.eyebrow-note) {
-          margin-bottom: 16px;
-          display: block;
-        }
-        .tented-content :global(h2) {
-          font-size: clamp(1.9rem, 3.4vw, 2.6rem);
-          margin-bottom: 20px;
-        }
-        .tented-content :global(p) {
-          color: var(--ink-dim);
-          max-width: 52ch;
-          margin-bottom: 16px;
-        }
-        .tented-meta {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          margin-top: 24px;
-          color: var(--gold);
-          font-size: 0.9rem;
-          font-weight: 500;
-        }
-        .tented-meta :global(svg) {
-          flex-shrink: 0;
-        }
-
-        .accom-gallery-grid {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 16px;
-          margin-top: 30px;
-        }
-        .accom-gallery-item {
-          position: relative;
-          aspect-ratio: 1;
-          border-radius: 4px;
-          overflow: hidden;
-          cursor: pointer;
-          border: 1px solid var(--line);
-        }
-        .accom-gallery-item :global(img) {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-        .accom-gallery-item:hover :global(img) {
-          transform: scale(1.1);
-        }
-        .accom-gallery-item::after {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(180deg, transparent 40%, rgba(20, 17, 11, 0.6) 100%);
-          opacity: 0;
-          transition: opacity 0.3s;
-        }
-        .accom-gallery-item:hover::after {
-          opacity: 1;
-        }
-
-        .accom-features-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 30px;
-        }
-        .accom-feature-card {
-          background: #fff;
-          border: 1px solid var(--line);
-          border-radius: 4px;
-          padding: 40px 32px;
-          text-align: center;
-          transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-        .accom-feature-card:hover {
-          transform: translateY(-6px);
-          box-shadow: 0 16px 32px rgba(20, 17, 11, 0.12);
-          border-color: var(--gold);
-        }
-        .accom-feature-icon {
-          width: 56px;
-          height: 56px;
-          border-radius: 50%;
-          background: var(--gold-soft);
-          border: 1px solid rgba(169, 121, 28, 0.25);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin: 0 auto 20px;
-          color: var(--gold);
-        }
-        .accom-feature-icon :global(svg) {
-          width: 26px;
-          height: 26px;
-        }
-        .accom-feature-card :global(h3) {
-          font-family: var(--serif);
-          font-size: 1.25rem;
-          margin-bottom: 10px;
-          color: var(--ink);
-        }
-        .accom-feature-card :global(p) {
-          color: var(--ink-dim);
-          font-size: 0.9rem;
-          line-height: 1.7;
-        }
-
-        .accom-booking-section {
-          background: linear-gradient(135deg, rgba(20, 17, 11, 0.88), rgba(20, 17, 11, 0.92)), url("/background.jpg") center/cover no-repeat fixed;
-          color: #fff;
-          position: relative;
-        }
-        .accom-booking-section :global(.eyebrow-note) {
-          color: var(--gold-bright);
-        }
-        .accom-booking-section :global(h2) {
-          color: #fff;
-        }
-        .accom-booking-form {
-          max-width: 600px;
-          margin: 0 auto;
-          background: rgba(255, 255, 255, 0.04);
-          border: 1px solid var(--line-dark-strong);
-          border-radius: 4px;
-          padding: clamp(32px, 5vw, 54px);
-          backdrop-filter: blur(8px);
-        }
-        .accom-form-group {
-          margin-bottom: 24px;
-        }
-        .accom-form-group :global(label) {
-          display: block;
-          font-size: 0.78rem;
-          font-weight: 600;
-          letter-spacing: 0.06em;
-          color: var(--ink-on-dark-dim);
-          text-transform: uppercase;
-          margin-bottom: 10px;
-        }
-        .accom-form-group :global(input),
-        .accom-form-group :global(select) {
-          width: 100%;
-          padding: 14px 16px;
-          background: rgba(255, 255, 255, 0.06);
-          border: 1px solid var(--line-dark);
-          border-radius: 2px;
-          color: #fff;
-          font-family: var(--sans);
-          font-size: 0.95rem;
-          transition: border-color 0.3s, background 0.3s;
-        }
-        .accom-form-group :global(input:focus),
-        .accom-form-group :global(select:focus) {
-          outline: none;
-          border-color: var(--gold);
-          background: rgba(255, 255, 255, 0.1);
-        }
-        .accom-form-group :global(input::placeholder) {
-          color: var(--ink-on-dark-dim);
-          opacity: 0.6;
-        }
-        .accom-form-group :global(select option) {
-          background: #1d1811;
-          color: #fff;
-        }
-        .accom-form-row {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 20px;
-        }
-        .accom-booking-submit {
-          width: 100%;
-          padding: 16px;
-          background: var(--gold);
-          color: #fff;
-          border: none;
-          border-radius: 2px;
-          font-family: var(--sans);
-          font-weight: 600;
-          font-size: 1rem;
-          cursor: pointer;
-          transition: all 0.3s;
-          letter-spacing: 0.02em;
-        }
-        .accom-booking-submit:hover {
-          background: #8f671a;
-          transform: translateY(-2px);
-        }
-
-        @media (max-width: 980px) {
-          .accom-hero :global(.hero-inner) {
-            padding-top: calc(var(--pad) + 140px);
-          }
-        }
-        @media (max-width: 900px) {
-          .tented-section {
-            grid-template-columns: 1fr;
-            gap: 40px;
-          }
-          .tented-image-wrap {
-            max-width: 540px;
-          }
-          .accom-gallery-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-          .accom-features-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-          .accom-form-row {
-            grid-template-columns: 1fr;
-          }
-        }
-        @media (max-width: 600px) {
-          .accom-features-grid {
-            grid-template-columns: 1fr;
-          }
-          .accom-gallery-grid {
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-          }
-        }
-      `}</style> */}
     </>
   );
 }

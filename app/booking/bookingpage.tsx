@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "../lib/firebase";
 
 export default function BookingPage() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -12,6 +14,8 @@ export default function BookingPage() {
   const [custEmail, setCustEmail] = useState("");
   const [specialRequests, setSpecialRequests] = useState("");
   const [refNum, setRefNum] = useState("0000");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -27,18 +31,79 @@ export default function BookingPage() {
     vicfalls: "Victoria Falls Crossing",
   };
 
+  // Per-person price for each tour, matching the Step 1 dropdown labels.
+  // Used to store an estimated total alongside the booking.
+  const tourPrices: Record<string, number> = {
+    kruger: 6500,
+    suncity: 4000,
+    qwaqwa: 5500,
+    mpumalanga: 5500,
+    winelands: 1800,
+    drakensberg: 5200,
+    soweto: 950,
+    blyde: 1400,
+    vicfalls: 9800,
+  };
+
   const updateGuests = (delta: number) => {
     setGuests((g) => Math.max(1, Math.min(20, g + delta)));
   };
 
   const goToStep = (step: number) => {
     setCurrentStep(step);
-    if (step === 3) {
-      setRefNum(String(Math.floor(1000 + Math.random() * 9000)));
-    }
     setTimeout(() => {
       document.querySelector(".section")?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 50);
+  };
+
+  // Called from the Step 2 "Continue" button. Writes the booking to
+  // Firestore, then advances to the Step 3 confirmation screen.
+  const submitBooking = async () => {
+    if (isSubmitting) return;
+    setSubmitError("");
+
+    if (!tour || !tourDate) {
+      setSubmitError("Please go back and select a tour and date.");
+      return;
+    }
+    if (!custName || !custPhone || !custEmail) {
+      setSubmitError("Please fill in your name, phone number, and email.");
+      return;
+    }
+    if (!custEmail.includes("@")) {
+      setSubmitError("Please enter a valid email address containing an @ sign.");
+      return;
+    }
+
+    const newRefNum = String(Math.floor(1000 + Math.random() * 9000));
+    const pricePerPerson = tourPrices[tour] ?? 0;
+
+    setIsSubmitting(true);
+    try {
+      await addDoc(collection(db, "bookings"), {
+        reference: `MT-${newRefNum}`,
+        tourId: tour,
+        tourName: tourNames[tour] ?? tour,
+        tourDate,
+        guests,
+        pricePerPerson,
+        estimatedTotal: pricePerPerson * guests,
+        customerName: custName,
+        customerPhone: custPhone,
+        customerEmail: custEmail,
+        specialRequests,
+        status: "pending",
+        createdAt: serverTimestamp(),
+      });
+
+      setRefNum(newRefNum);
+      goToStep(3);
+    } catch (error) {
+      console.error("Failed to save booking:", error);
+      setSubmitError("Something went wrong sending your booking. Please try again, or call us on 079 644 5310.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const summaryTour = tourNames[tour] || "Not selected";
@@ -162,7 +227,7 @@ export default function BookingPage() {
                 <a href="https://facebook.com/SitePad" target="_blank" rel="noopener noreferrer" aria-label="facebook" className="w-7 h-7 rounded-full flex items-center justify-center bg-[#C9A227]/10 border border-[#C9A227]/30 text-[#C9A227] hover:bg-[#C9A227] hover:text-[#14110B] transition-all duration-300 hover:scale-110">
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
                 </a>
-                <a href="https://www.instagram.com/explore/tags/sitepad/" target="_blank" rel="noopener noreferrer" aria-label="instagram" className="w-7 h-7 rounded-full flex items-center justify-center bg-[#C9A227]/10 border border-[#C9A227]/30 text-[#C9A227] hover:bg-[#C9A227] hover:text-[#14110B] transition-all duration-300 hover:scale-110">
+                <a href="https://www.instagram.com/malikan_tours?igsi=YzMzMDh5M3R4a3V3&utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="instagram" className="w-7 h-7 rounded-full flex items-center justify-center bg-[#C9A227]/10 border border-[#C9A227]/30 text-[#C9A227] hover:bg-[#C9A227] hover:text-[#14110B] transition-all duration-300 hover:scale-110">
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
                 </a>
                 <a href="https://x.com/sitepad_editor" target="_blank" rel="noopener noreferrer" aria-label="twitter" className="w-7 h-7 rounded-full flex items-center justify-center bg-[#C9A227]/10 border border-[#C9A227]/30 text-[#C9A227] hover:bg-[#C9A227] hover:text-[#14110B] transition-all duration-300 hover:scale-110">
@@ -310,10 +375,11 @@ export default function BookingPage() {
             <span className="eyebrow-note">Step 1 of 3</span>
             <h2 className="h-display" style={{marginTop: "10px", fontSize: "clamp(1.6rem, 3vw, 2.2rem)"}}>Select your experience</h2>
             <p className="lede" style={{marginTop: "12px", marginBottom: "34px", fontSize: ".98rem"}}>Pick the tour that fits your schedule and we&apos;ll personalise the rest.</p>
+            <p style={{marginBottom: "24px", color: "var(--ink-dim)", fontSize: ".88rem"}}><strong>Fields marked with * are required</strong></p>
 
             <div className="form-field">
-              <label htmlFor="tourSelect">Select Tour</label>
-              <select id="tourSelect" value={tour} onChange={(e) => setTour(e.target.value)}>
+              <label htmlFor="tourSelect">Select Tour *</label>
+              <select id="tourSelect" value={tour} onChange={(e) => setTour(e.target.value)} required>
                 <option value="" disabled>Select your tour…</option>
                 <option value="kruger">Kruger National Park Safari — R 6 500 pp</option>
                 <option value="suncity">Sun City &amp; Nature Getaway — R 4 000 pp</option>
@@ -329,8 +395,8 @@ export default function BookingPage() {
 
             <div className="form-grid">
               <div className="form-field">
-                <label htmlFor="tourDate">Select Date</label>
-                <input type="date" id="tourDate" value={tourDate} onChange={(e) => setTourDate(e.target.value)} min={today} />
+                <label htmlFor="tourDate">Select Date *</label>
+                <input type="date" id="tourDate" value={tourDate} onChange={(e) => setTourDate(e.target.value)} min={today} required />
               </div>
               <div className="form-field">
                 <label>Number of Guests</label>
@@ -352,21 +418,22 @@ export default function BookingPage() {
             <span className="eyebrow-note">Step 2 of 3</span>
             <h2 className="h-display" style={{marginTop: "10px", fontSize: "clamp(1.6rem, 3vw, 2.2rem)"}}>Traveller details</h2>
             <p className="lede" style={{marginTop: "12px", marginBottom: "34px", fontSize: ".98rem"}}>Tell us who you are and how to reach you.</p>
+            <p style={{marginBottom: "24px", color: "var(--ink-dim)", fontSize: ".88rem"}}><strong>Fields marked with * are required</strong></p>
 
             <div className="form-grid">
               <div className="form-field">
-                <label htmlFor="custName">Full Name</label>
-                <input type="text" id="custName" placeholder="e.g. Thabo Molefe" value={custName} onChange={(e) => setCustName(e.target.value)} />
+                <label htmlFor="custName">Full Name *</label>
+                <input type="text" id="custName" placeholder="e.g. Thabo Molefe" value={custName} onChange={(e) => setCustName(e.target.value)} required />
               </div>
               <div className="form-field">
-                <label htmlFor="custPhone">Phone Number</label>
-                <input type="tel" id="custPhone" placeholder="e.g. 079 644 5310" value={custPhone} onChange={(e) => setCustPhone(e.target.value)} />
+                <label htmlFor="custPhone">Phone Number *</label>
+                <input type="tel" id="custPhone" inputMode="numeric" pattern="[0-9]*" placeholder="e.g. 0796445310" value={custPhone} onChange={(e) => setCustPhone(e.target.value.replace(/\D/g, ""))} required />
               </div>
             </div>
 
             <div className="form-field">
-              <label htmlFor="custEmail">Email Address</label>
-              <input type="email" id="custEmail" placeholder="e.g. thabo@email.co.za" value={custEmail} onChange={(e) => setCustEmail(e.target.value)} />
+              <label htmlFor="custEmail">Email Address *</label>
+              <input type="email" id="custEmail" placeholder="e.g. thabo@email.co.za" value={custEmail} onChange={(e) => setCustEmail(e.target.value)} required />
             </div>
 
             <div className="form-field">
@@ -374,9 +441,17 @@ export default function BookingPage() {
               <textarea id="specialRequests" placeholder="Dietary requirements, accessibility needs, pickup location, or anything else we should know…" value={specialRequests} onChange={(e) => setSpecialRequests(e.target.value)}></textarea>
             </div>
 
+            {submitError && (
+              <p style={{ color: "#dc2626", fontSize: ".88rem", marginTop: "16px" }} role="alert">
+                {submitError}
+              </p>
+            )}
+
             <div style={{display: "flex", justifyContent: "space-between", marginTop: "10px", gap: "16px", flexWrap: "wrap"}}>
-              <button className="btn btn-ghost" onClick={() => goToStep(1)}>← Back</button>
-              <button className="btn btn-primary" onClick={() => goToStep(3)}>Continue <span className="btn-arrow">→</span></button>
+              <button className="btn btn-ghost" onClick={() => goToStep(1)} disabled={isSubmitting}>← Back</button>
+              <button className="btn btn-primary" onClick={submitBooking} disabled={isSubmitting}>
+                {isSubmitting ? "Sending…" : "Continue"} <span className="btn-arrow">→</span>
+              </button>
             </div>
           </div>
 
