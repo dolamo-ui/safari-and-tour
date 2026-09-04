@@ -183,7 +183,7 @@ export default function AccommodationPage() {
       form.reset();
     } catch (err) {
       console.error(err);
-      setSubmitError("Something went wrong saving your booking. Please try again or call 079 644 5310.");
+      setSubmitError("Something went wrong saving your booking. Please try again or call 063 234 4970.");
     } finally {
       setIsSubmitting(false);
     }
@@ -341,7 +341,7 @@ export default function AccommodationPage() {
                 </div>
                 <div className="accom-form-group">
                   <label htmlFor="phone">Phone Number *</label>
-                  <input type="tel" id="phone" name="phone" inputMode="numeric" pattern="[0-9]*" placeholder="0796445310" onInput={(e) => { e.currentTarget.value = e.currentTarget.value.replace(/\D/g, ""); }} required />
+                  <input type="tel" id="phone" name="phone" inputMode="numeric" pattern="[0-9]*" placeholder="0632344970" onInput={(e) => { e.currentTarget.value = e.currentTarget.value.replace(/\D/g, ""); }} required />
                 </div>
                 <div className="accom-form-group">
                   <label htmlFor="requests">Special Requests</label>
@@ -381,7 +381,7 @@ export default function AccommodationPage() {
                 </div>
               </div>
               <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
-                <a href="tel:0796445310" className="btn btn-primary">Call us now <span className="btn-arrow">→</span></a>
+                <a href="tel:0632344970" className="btn btn-primary">Call us now <span className="btn-arrow">→</span></a>
                 <button onClick={() => setSubmitted(false)} className="btn btn-ghost on-dark">Make another booking</button>
               </div>
             </div>
@@ -405,7 +405,7 @@ export default function AccommodationPage() {
             <h2 className="h-display" style={{ color: "#fff", marginTop: "14px", fontSize: "clamp(1.8rem, 3.5vw, 2.6rem)" }}>Not sure which stay suits you?</h2>
             <p style={{ color: "var(--ink-on-dark-dim)", marginTop: "16px", maxWidth: "48ch", marginInline: "auto" }}>Call us and we'll talk through the options — no pressure, just honest advice from people who know the camps.</p>
             <div className="hero-actions" style={{ marginTop: "30px" }}>
-              <a href="tel:0796445310" className="btn btn-primary">Call 079 644 5310 <span className="btn-arrow">→</span></a>
+              <a href="tel:0632344970" className="btn btn-primary">Call 063 234 4970 <span className="btn-arrow">→</span></a>
               <a href="mailto:info@malikantours.co.za" className="btn btn-ghost on-dark">Email us</a>
             </div>
           </div>

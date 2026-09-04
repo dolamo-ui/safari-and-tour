@@ -48,7 +48,7 @@ export default function SiteHeader() {
         <div className="wrap site-topbar-inner">
           <div className="site-topbar-links">
             <a href="mailto:info@malikantours.co.za">info@malikantours.co.za</a>
-            <a href="tel:0796445310">079 644 5310</a>
+            <a href="tel:0632344970">063 234 4970</a>
           </div>
           <span className="site-topbar-note">Southern Africa, thoughtfully explored</span>
         </div>
@@ -106,7 +106,7 @@ export default function SiteHeader() {
           </nav>
           <a href="/booking" className="site-book-button site-book-button-mobile" onClick={() => setDrawerOpen(false)}>Book now <span aria-hidden="true">→</span></a>
           <div className="site-drawer-contact">
-            <a href="tel:0796445310">079 644 5310</a>
+            <a href="tel:0632344970">063 234 4970</a>
             <a href="mailto:info@malikantours.co.za">info@malikantours.co.za</a>
           </div>
         </aside>

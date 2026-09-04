@@ -837,7 +837,7 @@ export default function DestinationsPage() {
               <p
                 style={{ color: "var(--ink-faint)", fontSize: ".92rem" }}
               >
-                We&apos;re always adding new routes. Call us on 079 644 5310
+                We&apos;re always adding new routes. Call us on 063 234 4970
                 and we&apos;ll see what&apos;s possible.
               </p>
             </div>
@@ -869,20 +869,20 @@ export default function DestinationsPage() {
               <a href="mailto:info@malikantours.co.za" className="btn btn-primary">
                 Email us <span className="btn-arrow">→</span>
               </a>
-              <a href="tel:0796445310" className="btn btn-ghost on-dark">
-                Call 079 644 5310
+              <a href="tel:0632344970" className="btn btn-ghost on-dark">
+                Call 063 234 4970
               </a>
             </div>
           </div>
           <div className="cta-details reveal">
-            <a href="tel:0796445310">
-              Call us anytime<b>079 644 5310</b>
+            <a href="tel:0632344970">
+              Call us anytime<b>063 234 4970</b>
             </a>
             <a href="mailto:info@malikantours.co.za">
               Email<b>info@malikantours.co.za</b>
             </a>
             <span>
-              Office hours<b>Mon – Fri, 9am – 5pm</b>
+              Office hours<b>Mon – Fri, 7am – 5pm</b>
             </span>
             <span>
               Based in<b>Marloth Park, Kruger National Park</b>
@@ -954,7 +954,7 @@ export default function DestinationsPage() {
           </div>
           <div className="footer-col">
             <h4>CONTACT</h4>
-            <span>079 644 5310</span>
+            <span>063 234 4970 </span>
             <span>info@malikantours.co.za</span>
             <span>1717 Kingfisher Street, Marloth Park<br />Kruger National Park</span>
           </div>

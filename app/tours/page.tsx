@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useCurrency } from "../lib/currency";
 
 type Tour = {
   name: string;
@@ -193,6 +194,7 @@ function priceBucket(p: number) {
 // is why type-checking is disabled for this file. The tour search/filter UI
 // itself IS proper React state (see useState/useMemo below).
 export default function ToursPage() {
+  const { formatPrice } = useCurrency();
   const [search, setSearch] = useState("");
   const [durationFilter, setDurationFilter] = useState("all");
   const [priceFilter, setPriceFilter] = useState("all");
@@ -496,9 +498,9 @@ export default function ToursPage() {
           <svg viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
           <select id="priceSelect" value={priceFilter} onChange={(e) => setPriceFilter(e.target.value)}>
             <option value="all">Any budget</option>
-            <option value="low">Under R5 000</option>
-            <option value="mid">R5 000 – R8 000</option>
-            <option value="high">R8 000+</option>
+            <option value="low">Under {formatPrice(5000)}</option>
+            <option value="mid">{formatPrice(5000)} – {formatPrice(8000)}</option>
+            <option value="high">{formatPrice(8000)}+</option>
           </select>
         </div>
       </div>
@@ -548,7 +550,10 @@ export default function ToursPage() {
             <p className="desc">{t.desc}</p>
             <div className="tour-price-row">
               <div className="tour-price">
-                <span className="amt">{t.priceLabel}</span>
+                <span className="amt">
+                  {t.priceLabel.startsWith("From ") ? "From " : ""}
+                  {formatPrice(t.price)} pp
+                </span>
                 <span className="unit">per person</span>
               </div>
               <a href="/booking" className="tour-view">View tour <span>→</span></a>
@@ -573,13 +578,13 @@ export default function ToursPage() {
       <h2 className="h-display" style={{marginTop: '14px'}}>We build custom itineraries too.</h2>
       <div className="hero-actions" style={{marginTop: '30px', justifyContent: 'flex-start', display: 'flex', gap: '16px', flexWrap: 'wrap'}}>
         <a href="mailto:info@malikantours.co.za" className="btn btn-primary">Email us <span className="btn-arrow">→</span></a>
-        <a href="tel:0796445310" className="btn btn-ghost on-dark">Call 079 644 5310</a>
+        <a href="tel:0632344970" className="btn btn-ghost on-dark">Call 063 234 4970</a>
       </div>
     </div>
     <div className="cta-details reveal">
-      <a href="tel:0796445310">Call us anytime<b>079 644 5310</b></a>
+      <a href="tel:0632344970">Call us anytime<b>063 234 4970</b></a>
       <a href="mailto:info@malikantours.co.za">Email<b>info@malikantours.co.za</b></a>
-      <span>Office hours<b>Mon – Fri, 9am – 5pm</b></span>
+      <span>Office hours<b>Mon – Fri, 7am – 5pm</b></span>
       <span>Based in<b>Marloth Park, Kruger National Park</b></span>
     </div>
   </div>
@@ -610,7 +615,7 @@ export default function ToursPage() {
     </div>
     <div className="footer-col">
       <h4>CONTACT</h4>
-      <span>079 644 5310</span>
+      <span>063 234 4970</span>
       <span>info@malikantours.co.za</span>
       <span>1717 Kingfisher Street, Marloth Park<br />Kruger National Park</span>
     </div>

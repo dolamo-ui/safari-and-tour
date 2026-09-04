@@ -189,9 +189,9 @@ export default function ContactPage() {
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#C9A227]"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
           <span className="hidden sm:inline">info@malikantours.co.za</span>
         </a>
-        <a href="tel:0796445310" className="flex items-center gap-2 link-underline hover:text-[#C9A227] transition-colors duration-300">
+        <a href="tel:0632344970" className="flex items-center gap-2 link-underline hover:text-[#C9A227] transition-colors duration-300">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#C9A227]"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          <span>0796445310</span>
+          <span>063 234 4970</span>
         </a>
       </div>
       <div className="flex items-center gap-4 text-[#C9C2B4]">
@@ -233,7 +233,7 @@ export default function ContactPage() {
           </span>
           <div className="leading-tight">
             <p className="overline-label text-[11px]">Hours</p>
-            <p className="text-[12px] text-white font-medium">Mon–Fri, 9am–5pm</p>
+            <p className="text-[12px] text-white font-medium">Mon–Fri, 7am–5pm</p>
           </div>
         </div>
         <div className="flex items-center gap-4">
@@ -242,7 +242,7 @@ export default function ContactPage() {
           </span>
           <div className="leading-tight">
             <p className="overline-label text-[11px]">Call us</p>
-            <a href="tel:0796445310" className="text-[12px] text-white font-medium hover:text-[#C9A227] transition-colors duration-300">+27 796 445 310</a>
+            <a href="tel:0796445310" className="text-[12px] text-white font-medium hover:text-[#C9A227] transition-colors duration-300">+27 63 234 4970</a>
           </div>
         </div>
       </div>
@@ -297,7 +297,7 @@ export default function ContactPage() {
       <div className="mt-auto p-5 border-t border-[#C9A227]/20 text-[13px] text-white/70 space-y-3">
         <a href="tel:0796445310" className="flex items-center gap-2 hover:text-[#C9A227] transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#C9A227] flex-shrink-0"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          0796445310
+          0632344970
         </a>
         <a href="mailto:info@malikantours.co.za" className="flex items-center gap-2 hover:text-[#C9A227] transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#C9A227] flex-shrink-0"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
@@ -324,7 +324,7 @@ export default function ContactPage() {
       <h1 className="h-display">Get in <em>Touch</em></h1>
       <p className="lede">Let&apos;s plan your next adventure. Whether it&apos;s a weekend escape or a cross-border journey, we&apos;re here to map it out with you.</p>
       <div className="hero-actions">
-        <a href="tel:0796445310" className="btn btn-primary">Call us now <span className="btn-arrow">→</span></a>
+        <a href="tel:0632344970" className="btn btn-primary">Call us now <span className="btn-arrow">→</span></a>
         <a href="mailto:info@malikantours.co.za" className="btn btn-ghost on-dark">Send an email</a>
       </div>
     </div>
@@ -349,7 +349,7 @@ export default function ContactPage() {
           </div>
           <div className="contact-info">
             <h4>Phone</h4>
-            <a href="tel:0796445310">079 644 5310</a>
+            <a href="tel:0632344970">063 234 4970</a>
           </div>
         </div>
 
@@ -379,7 +379,7 @@ export default function ContactPage() {
           </div>
           <div className="contact-info">
             <h4>WhatsApp</h4>
-            <a href="https://wa.me/27796445310" target="_blank" rel="noopener noreferrer">+27 79 644 5310</a>
+            <a href="https://wa.me/27632344970" target="_blank" rel="noopener noreferrer">+27 63 234 4970</a>
             <p style={{fontSize: '.8rem', marginTop: '4px', color: 'var(--ink-faint)'}}>Message us anytime — we reply within a few hours.</p>
           </div>
         </div>
@@ -388,15 +388,15 @@ export default function ContactPage() {
           <h4 style={{fontFamily: 'var(--serif)', fontSize: '1.1rem', fontWeight: 400, color: 'var(--ink)', margin: '0 0 12px'}}>Office Hours</h4>
           <div style={{display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--line)', fontSize: '.9rem', color: 'var(--ink-dim)'}}>
             <span>Monday – Friday</span>
-            <span style={{color: 'var(--ink)', fontWeight: 500}}>9:00 AM – 5:00 PM</span>
+            <span style={{color: 'var(--ink)', fontWeight: 500}}>7:00 AM – 5:00 PM</span>
           </div>
           <div style={{display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--line)', fontSize: '.9rem', color: 'var(--ink-dim)'}}>
             <span>Saturday</span>
-            <span style={{color: 'var(--ink)', fontWeight: 500}}>By appointment</span>
+            <span style={{color: 'var(--ink)', fontWeight: 500}}>9:00 AM – 5:00 PM</span>
           </div>
           <div style={{display: 'flex', justifyContent: 'space-between', padding: '8px 0', fontSize: '.9rem', color: 'var(--ink-dim)'}}>
             <span>Sunday</span>
-            <span style={{color: 'var(--ink)', fontWeight: 500}}>Closed</span>
+            <span style={{color: 'var(--ink)', fontWeight: 500}}>By appointment</span>
           </div>
         </div>
       </div>
@@ -434,7 +434,7 @@ export default function ContactPage() {
               </div>
               <div className="form-group">
                 <label htmlFor="phone">Phone Number</label>
-                <input type="tel" id="phone" name="phone" inputMode="numeric" pattern="[0-9]*" placeholder="0796445310" value={formData.phone} onChange={handleChange} />
+                <input type="tel" id="phone" name="phone" inputMode="numeric" pattern="[0-9]*" placeholder="063 234 4970" value={formData.phone} onChange={handleChange} />
               </div>
               <div className="form-group">
                 <label htmlFor="message">Your Message *</label>
@@ -521,7 +521,7 @@ export default function ContactPage() {
     </div>
     <div className="footer-col">
       <h4>CONTACT</h4>
-      <a href="tel:0796445310">079 644 5310</a>
+      <a href="tel:0632344970">063 234 4970</a>
       <a href="mailto:info@malikantours.co.za">info@malikantours.co.za</a>
       <span>1717 Kingfisher Street, Marloth Park<br />Kruger National Park</span>
     </div>

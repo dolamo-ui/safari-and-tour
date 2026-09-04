@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useCurrency } from "../lib/currency";
 
 const galleryImages = [
   { src: "/hero.jpg", alt: "Kruger sunrise over the savanna" },
@@ -31,6 +32,7 @@ const itinerary = [
 ];
 
 export default function TourPageClient() {
+  const { formatPrice } = useCurrency();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
@@ -196,7 +198,7 @@ export default function TourPageClient() {
                 >
                   <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                 </svg>
-                <span>0796445310</span>
+                <span>063 234 4970</span>
               </a>
             </div>
             <div className="flex items-center gap-4 text-[#C9C2B4]">
@@ -354,7 +356,7 @@ export default function TourPageClient() {
                     href="tel:0796445310"
                     className="text-[12px] text-white font-medium hover:text-[#C9A227] transition-colors duration-300"
                   >
-                    +27 796 445 310
+                    +27 63 234 4970
                   </a>
                 </div>
               </div>
@@ -566,7 +568,7 @@ export default function TourPageClient() {
             </nav>
             <div className="mt-auto p-5 border-t border-[#C9A227]/20 text-[13px] text-white/70 space-y-3">
               <a
-                href="tel:0796445310"
+                href="tel:0632344970"
                 className="flex items-center gap-2 hover:text-[#C9A227] transition-colors"
               >
                 <svg
@@ -583,7 +585,7 @@ export default function TourPageClient() {
                 >
                   <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                 </svg>
-                0796445310
+                0632344970
               </a>
               <a
                 href="mailto:info@malikantours.co.za"
@@ -800,7 +802,7 @@ export default function TourPageClient() {
             <aside className="reveal">
               <div className="booking-box">
                 <p className="price-label">From</p>
-                <p className="price-amt">R 5 999</p>
+                <p className="price-amt">{formatPrice(5999)}</p>
                 <p className="price-note">per person, all-inclusive</p>
                 <div className="booking-divider"></div>
                 <div className="booking-field">
@@ -1076,7 +1078,7 @@ export default function TourPageClient() {
             <aside className="reveal">
               <div className="booking-box">
                 <p className="price-label">From</p>
-                <p className="price-amt">R 5 999</p>
+                <p className="price-amt">{formatPrice(5999)}</p>
                 <p className="price-note">per person, all-inclusive</p>
                 <div className="booking-divider"></div>
                 <div className="booking-field">
@@ -1138,18 +1140,18 @@ export default function TourPageClient() {
               <a href="mailto:info@malikantours.co.za" className="btn btn-primary">
                 Email us <span className="btn-arrow">→</span>
               </a>
-              <a href="tel:0796445310" className="btn btn-ghost on-dark">Call 079 644 5310</a>
+              <a href="tel:0632344970" className="btn btn-ghost on-dark">Call 063 234 4970</a>
             </div>
           </div>
           <div className="cta-details reveal">
-            <a href="tel:0796445310">
-              Call us anytime<b>079 644 5310</b>
+            <a href="tel:0632344970">
+              Call us anytime<b>063 234 4970</b>
             </a>
             <a href="mailto:info@malikantours.co.za">
               Email<b>info@malikantours.co.za</b>
             </a>
             <span>
-              Office hours<b>Mon – Fri, 9am – 5pm</b>
+              Office hours<b>Mon – Fri, 7am – 5pm</b>
             </span>
             <span>
               Based in<b>Marloth Park, Kruger National Park</b>
@@ -1196,7 +1198,7 @@ export default function TourPageClient() {
           </div>
           <div className="footer-col">
             <h4>CONTACT</h4>
-            <span>079 644 5310</span>
+            <span>063 234 4970</span>
             <span>info@malikantours.co.za</span>
             <span>1717 Kingfisher Street, Marloth Park<br />Kruger National Park</span>
           </div>

@@ -6,8 +6,11 @@
 "use client";
 
 import { useEffect } from "react";
+import { useCurrency } from "./lib/currency";
 
 export default function Page() {
+  const { formatPrice } = useCurrency();
+
   useEffect(() => {
     // ---- Nav glass effect on scroll ----
     const nav = document.getElementById("main-nav");
@@ -210,7 +213,7 @@ export default function Page() {
         </a>
         <a href="tel:0796445310" className="flex items-center gap-2 link-underline hover:text-[#C9A227] transition-colors duration-300">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#C9A227]"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          <span>0796445310</span>
+          <span>063 234 4970</span>
         </a>
       </div>
       <div className="flex items-center gap-4 text-[#C9C2B4]">
@@ -252,7 +255,7 @@ export default function Page() {
           </span>
           <div className="leading-tight">
             <p className="overline-label text-[11px]">Hours</p>
-            <p className="text-[12px] text-white font-medium">Mon–Fri, 9am–5pm</p>
+            <p className="text-[12px] text-white font-medium">Mon–Fri, 7am–5pm</p>
           </div>
         </div>
         <div className="flex items-center gap-4">
@@ -261,7 +264,7 @@ export default function Page() {
           </span>
           <div className="leading-tight">
             <p className="overline-label text-[11px]">Call us</p>
-            <a href="tel:0796445310" className="text-[12px] text-white font-medium hover:text-[#C9A227] transition-colors duration-300">+27 796 445 310</a>
+            <a href="tel:0632344970" className="text-[12px] text-white font-medium hover:text-[#C9A227] transition-colors duration-300">+27 63 234 4970</a>
           </div>
         </div>
       </div>
@@ -314,13 +317,18 @@ export default function Page() {
         <a href="/booking" className="inline-flex items-center justify-center gap-2 bg-[#22c55e] text-[#0b1f0d] px-5 py-3 mt-6 text-[12px] font-semibold tracking-[0.08em] uppercase rounded-full shadow-[0_12px_30px_rgba(34,197,94,0.35)]">🟢 BOOK NOW</a>
       </nav>
       <div className="mt-auto p-5 border-t border-[#C9A227]/20 text-[13px] text-white/70 space-y-3">
-        <a href="tel:0796445310" className="flex items-center gap-2 hover:text-[#C9A227] transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#C9A227] flex-shrink-0"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          0796445310
+        <a href="tel:0632344970" className="flex items-center gap-2 hover:text-[#C9A227] transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#C9A227] flex-shrink-0">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1 3.6 4.7L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+          </svg>
+          <span>063 234 4970</span>
         </a>
         <a href="mailto:info@malikantours.co.za" className="flex items-center gap-2 hover:text-[#C9A227] transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#C9A227] flex-shrink-0"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-          info@malikantours.co.za
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#C9A227] flex-shrink-0">
+            <rect width="20" height="16" x="2" y="4" rx="2" />
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+          </svg>
+          <span>info@malikantours.co.za</span>
         </a>
       </div>
     </aside>
@@ -457,15 +465,15 @@ export default function Page() {
           <div style={{padding: '0 0 16px', marginBottom: '16px', borderBottom: '1px solid var(--line)'}}>
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', marginBottom: '8px', fontSize: '.9rem', color: 'var(--ink)'}}>
               <span>2 Days &amp; 1 Night</span>
-              <strong style={{color: 'var(--gold)', fontFamily: 'var(--serif)'}}>R 4 000 pp</strong>
+              <strong style={{color: 'var(--gold)', fontFamily: 'var(--serif)'}}>{formatPrice(4000)} pp</strong>
             </div>
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', marginBottom: '8px', fontSize: '.9rem', color: 'var(--ink)'}}>
               <span>3 Days &amp; 2 Nights</span>
-              <strong style={{color: 'var(--gold)', fontFamily: 'var(--serif)'}}>R 6 000 pp</strong>
+              <strong style={{color: 'var(--gold)', fontFamily: 'var(--serif)'}}>{formatPrice(6000)} pp</strong>
             </div>
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', fontSize: '.9rem', color: 'var(--ink)'}}>
               <span>4 Days &amp; 3 Nights</span>
-              <strong style={{color: 'var(--gold)', fontFamily: 'var(--serif)'}}>R 8 000 pp</strong>
+              <strong style={{color: 'var(--gold)', fontFamily: 'var(--serif)'}}>{formatPrice(8000)} pp</strong>
             </div>
           </div>
           <div style={{color: 'var(--ink-dim)', fontSize: '.83rem', lineHeight: '1.7', marginBottom: '20px'}}>
@@ -496,7 +504,7 @@ export default function Page() {
           <div style={{padding: '0 0 16px', marginBottom: '16px', borderBottom: '1px solid var(--line)'}}>
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', fontSize: '.9rem', color: 'var(--ink)'}}>
               <span>3 Days &amp; 2 Nights</span>
-              <strong style={{color: 'var(--gold)', fontFamily: 'var(--serif)'}}>R 5 500 pp</strong>
+              <strong style={{color: 'var(--gold)', fontFamily: 'var(--serif)'}}>{formatPrice(5500)} pp</strong>
             </div>
           </div>
           <div style={{color: 'var(--ink-dim)', fontSize: '.83rem', lineHeight: '1.7', marginBottom: '20px'}}>
@@ -528,7 +536,7 @@ export default function Page() {
           <div style={{padding: '0 0 16px', marginBottom: '16px', borderBottom: '1px solid var(--line)'}}>
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', fontSize: '.9rem', color: 'var(--ink)'}}>
               <span>3 Days &amp; 2 Nights</span>
-              <strong style={{color: 'var(--gold)', fontFamily: 'var(--serif)'}}>R 5 500 pp</strong>
+              <strong style={{color: 'var(--gold)', fontFamily: 'var(--serif)'}}>{formatPrice(5500)} pp</strong>
             </div>
           </div>
           <div style={{color: 'var(--ink-dim)', fontSize: '.83rem', lineHeight: '1.7', marginBottom: '20px'}}>
@@ -831,7 +839,7 @@ export default function Page() {
 
     <div className="reveal" style={{textAlign: 'center', marginTop: '50px'}}>
       <p style={{color: 'var(--ink-dim)', fontSize: '.95rem', marginBottom: '24px'}}>Still have questions? We're here to answer them.</p>
-      <a href="tel:0796445310" style={{display: 'inline-flex', alignItems: 'center', gap: '.6em', padding: '1.1em 2em', border: '2px solid var(--gold)', background: 'transparent', color: 'var(--gold)', fontFamily: 'var(--sans)', fontWeight: '600', fontSize: '.95rem', textDecoration: 'none', borderRadius: '2px', transition: 'all .35s cubic-bezier(.2,.8,.2,1)'}} onMouseOver={(e) => { e.currentTarget.style.backgroundColor='var(--gold)'; e.currentTarget.style.color='#fff'; e.currentTarget.style.transform='translateY(-2px)'; }} onMouseOut={(e) => { e.currentTarget.style.backgroundColor='transparent'; e.currentTarget.style.color='var(--gold)'; e.currentTarget.style.transform='translateY(0)'; }}>Call us now <span style={{transition: 'transform .35s cubic-bezier(.2,.8,.2,1)'}}>→</span></a>
+      <a href="tel:0632344970" style={{display: 'inline-flex', alignItems: 'center', gap: '.6em', padding: '1.1em 2em', border: '2px solid var(--gold)', background: 'transparent', color: 'var(--gold)', fontFamily: 'var(--sans)', fontWeight: '600', fontSize: '.95rem', textDecoration: 'none', borderRadius: '2px', transition: 'all .35s cubic-bezier(.2,.8,.2,1)'}} onMouseOver={(e) => { e.currentTarget.style.backgroundColor='var(--gold)'; e.currentTarget.style.color='#fff'; e.currentTarget.style.transform='translateY(-2px)'; }} onMouseOut={(e) => { e.currentTarget.style.backgroundColor='transparent'; e.currentTarget.style.color='var(--gold)'; e.currentTarget.style.transform='translateY(0)'; }}>Call us now <span style={{transition: 'transform .35s cubic-bezier(.2,.8,.2,1)'}}>→</span></a>
     </div>
   </div>
 </section>
@@ -843,11 +851,11 @@ export default function Page() {
       <h2 className="h-display" style={{marginTop: '14px'}}>Tell us where, we'll work out how.</h2>
       <div className="hero-actions" style={{marginTop: '30px', justifyContent: 'flex-start'}}>
         <a href="mailto:info@malikantours.co.za" className="btn btn-primary">Email us <span className="btn-arrow">→</span></a>
-        <a href="tel:0796445310" className="btn btn-ghost on-dark">Call 079 644 5310</a>
+        <a href="tel:0632344970" className="btn btn-ghost on-dark">Call 063 234 4970</a>
       </div>
     </div>
     <div className="cta-details reveal">
-      <a href="tel:0796445310">Call us anytime<b>079 644 5310</b></a>
+      <a href="tel:0632344970">Call us anytime<b>063 234 4970</b></a>
       <a href="mailto:info@malikantours.co.za">Email<b>info@malikantours.co.za</b></a>
       <span>Office hours<b>Mon – Fri, 9am – 5pm</b></span>
       <span>Based in<b>Marloth Park, Kruger National Park</b></span>
@@ -880,7 +888,7 @@ export default function Page() {
     </div>
     <div className="footer-col">
       <h4>CONTACT</h4>
-      <span>079 644 5310</span>
+      <span>063 234 4970</span>
       <span>info@malikantours.co.za</span>
       <span>1717 Kingfisher Street, Marloth Park<br />Kruger National Park</span>
     </div>

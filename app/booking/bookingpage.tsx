@@ -3,8 +3,10 @@
 import { useEffect, useState } from "react";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../lib/firebase";
+import { useCurrency } from "../lib/currency";
 
 export default function BookingPage() {
+  const { formatPrice } = useCurrency();
   const [currentStep, setCurrentStep] = useState(1);
   const [guests, setGuests] = useState(2);
   const [tour, setTour] = useState("");
@@ -381,15 +383,15 @@ export default function BookingPage() {
               <label htmlFor="tourSelect">Select Tour *</label>
               <select id="tourSelect" value={tour} onChange={(e) => setTour(e.target.value)} required>
                 <option value="" disabled>Select your tour…</option>
-                <option value="kruger">Kruger National Park Safari — R 6 500 pp</option>
-                <option value="suncity">Sun City &amp; Nature Getaway — R 4 000 pp</option>
-                <option value="qwaqwa">Qwa Qwa Retreat — R 5 500 pp</option>
-                <option value="mpumalanga">Mpumalanga Retreat — R 5 500 pp</option>
-                <option value="winelands">Cape Winelands Weekend — R 1 800 pp</option>
-                <option value="drakensberg">Drakensberg Hiking Escape — R 5 200 pp</option>
-                <option value="soweto">Soweto Heritage Tour — R 950 pp</option>
-                <option value="blyde">Blyde River Canyon Day Trip — R 1 400 pp</option>
-                <option value="vicfalls">Victoria Falls Crossing — R 9 800 pp</option>
+                <option value="kruger">Kruger National Park Safari — {formatPrice(tourPrices.kruger)} pp</option>
+                <option value="suncity">Sun City &amp; Nature Getaway — {formatPrice(tourPrices.suncity)} pp</option>
+                <option value="qwaqwa">Qwa Qwa Retreat — {formatPrice(tourPrices.qwaqwa)} pp</option>
+                <option value="mpumalanga">Mpumalanga Retreat — {formatPrice(tourPrices.mpumalanga)} pp</option>
+                <option value="winelands">Cape Winelands Weekend — {formatPrice(tourPrices.winelands)} pp</option>
+                <option value="drakensberg">Drakensberg Hiking Escape — {formatPrice(tourPrices.drakensberg)} pp</option>
+                <option value="soweto">Soweto Heritage Tour — {formatPrice(tourPrices.soweto)} pp</option>
+                <option value="blyde">Blyde River Canyon Day Trip — {formatPrice(tourPrices.blyde)} pp</option>
+                <option value="vicfalls">Victoria Falls Crossing — {formatPrice(tourPrices.vicfalls)} pp</option>
               </select>
             </div>
 
@@ -496,9 +498,9 @@ export default function BookingPage() {
           <div className="reveal">
             <span className="eyebrow-note">Need help deciding?</span>
             <h2 className="h-display" style={{color: "#fff", marginTop: "14px", fontSize: "clamp(1.8rem, 3.5vw, 2.6rem)"}}>Rather talk it through first?</h2>
-            <p style={{color: "var(--ink-on-dark-dim)", marginTop: "16px", maxWidth: "48ch", marginInline: "auto"}}>Call Malikan directly on 079 644 5310. He&apos;ll walk you through the routes, timing, and what to pack.</p>
+            <p style={{color: "var(--ink-on-dark-dim)", marginTop: "16px", maxWidth: "48ch", marginInline: "auto"}}>Call Malikan directly on 063 234 4970. He&apos;ll walk you through the routes, timing, and what to pack.</p>
             <div style={{marginTop: "30px", display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap"}}>
-              <a href="tel:0796445310" className="btn btn-primary">Call 079 644 5310</a>
+              <a href="tel:0632344970" className="btn btn-primary">Call 063 234 4970</a>
               <a href="mailto:info@malikantours.co.za" className="btn btn-ghost on-dark">Email us</a>
             </div>
           </div>
@@ -523,7 +525,7 @@ export default function BookingPage() {
           </div>
           <div className="footer-col">
             <h4>CONTACT</h4>
-            <a href="tel:0796445310">079 644 5310</a>
+            <a href="tel:0632344970">063 234 4970</a>
             <a href="mailto:info@malikantours.co.za">info@malikantours.co.za</a>
             <span>1717 Kingfisher Street, Marloth Park<br />Kruger National Park</span>
           </div>
