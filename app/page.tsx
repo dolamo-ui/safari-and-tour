@@ -451,7 +451,7 @@ export default function Page() {
       {/* Tour Card 4 */}
       <div className="reveal" style={{background: '#fff', borderRadius: '6px', overflow: 'hidden', border: '1px solid var(--line)', transition: 'all .4s cubic-bezier(.2,.8,.2,1)', cursor: 'pointer'}} onMouseOver={(e) => { e.currentTarget.style.transform='translateY(-8px)'; e.currentTarget.style.boxShadow='0 16px 32px rgba(20,17,11,.15)'; }} onMouseOut={(e) => { e.currentTarget.style.transform='translateY(0)'; e.currentTarget.style.boxShadow='0 2px 8px rgba(20,17,11,.06)'; }}>
         <div style={{position: 'relative', height: '240px', overflow: 'hidden', background: 'linear-gradient(135deg, #14110B, #1D1811)'}}>
-          <img src="/hero.jpg" alt="Sun City & Nature Getaway" style={{width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .6s ease'}} onMouseOver={(e) => { e.currentTarget.style.transform='scale(1.08)'; }} onMouseOut={(e) => { e.currentTarget.style.transform='scale(1)'; }} />
+          <img src="https://i.imgur.com/t3cwwyS.jpeg" alt="Sun City & Nature Getaway" style={{width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .6s ease'}} onMouseOver={(e) => { e.currentTarget.style.transform='scale(1.08)'; }} onMouseOut={(e) => { e.currentTarget.style.transform='scale(1)'; }} />
           <div style={{position: 'absolute', top: '16px', right: '16px', background: 'var(--gold)', color: '#fff', padding: '8px 14px', borderRadius: '3px', fontSize: '.75rem', fontWeight: '600', letterSpacing: '.05em'}}>LUXURY ESCAPE</div>
         </div>
         <div style={{padding: '28px'}}>
@@ -490,7 +490,7 @@ export default function Page() {
       {/* Tour Card 5 */}
       <div className="reveal" style={{background: '#fff', borderRadius: '6px', overflow: 'hidden', border: '1px solid var(--line)', transition: 'all .4s cubic-bezier(.2,.8,.2,1)', cursor: 'pointer'}} onMouseOver={(e) => { e.currentTarget.style.transform='translateY(-8px)'; e.currentTarget.style.boxShadow='0 16px 32px rgba(20,17,11,.15)'; }} onMouseOut={(e) => { e.currentTarget.style.transform='translateY(0)'; e.currentTarget.style.boxShadow='0 2px 8px rgba(20,17,11,.06)'; }}>
         <div style={{position: 'relative', height: '240px', overflow: 'hidden', background: 'linear-gradient(135deg, #14110B, #1D1811)'}}>
-          <img src="/hero2.jpg" alt="Qwa Qwa Retreat" style={{width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .6s ease'}} onMouseOver={(e) => { e.currentTarget.style.transform='scale(1.08)'; }} onMouseOut={(e) => { e.currentTarget.style.transform='scale(1)'; }} />
+          <img src="https://i.imgur.com/cUIT53i.jpeg" alt="Qwa Qwa Retreat" style={{width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .6s ease'}} onMouseOver={(e) => { e.currentTarget.style.transform='scale(1.08)'; }} onMouseOut={(e) => { e.currentTarget.style.transform='scale(1)'; }} />
           <div style={{position: 'absolute', top: '16px', right: '16px', background: 'rgba(169,121,28,.9)', color: '#fff', padding: '8px 14px', borderRadius: '3px', fontSize: '.75rem', fontWeight: '600', letterSpacing: '.05em'}}>CULTURAL RETREAT</div>
         </div>
         <div style={{padding: '28px'}}>
@@ -522,7 +522,7 @@ export default function Page() {
       {/* Tour Card 6 */}
       <div className="reveal" style={{background: '#fff', borderRadius: '6px', overflow: 'hidden', border: '1px solid var(--line)', transition: 'all .4s cubic-bezier(.2,.8,.2,1)', cursor: 'pointer'}} onMouseOver={(e) => { e.currentTarget.style.transform='translateY(-8px)'; e.currentTarget.style.boxShadow='0 16px 32px rgba(20,17,11,.15)'; }} onMouseOut={(e) => { e.currentTarget.style.transform='translateY(0)'; e.currentTarget.style.boxShadow='0 2px 8px rgba(20,17,11,.06)'; }}>
         <div style={{position: 'relative', height: '240px', overflow: 'hidden', background: 'linear-gradient(135deg, #14110B, #1D1811)'}}>
-          <img src="/hero3.jpg" alt="Mpumalanga Retreat" style={{width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .6s ease'}} onMouseOver={(e) => { e.currentTarget.style.transform='scale(1.08)'; }} onMouseOut={(e) => { e.currentTarget.style.transform='scale(1)'; }} />
+          <img src="https://i.imgur.com/dFA2NvU.jpeg" alt="Mpumalanga Retreat" style={{width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .6s ease'}} onMouseOver={(e) => { e.currentTarget.style.transform='scale(1.08)'; }} onMouseOut={(e) => { e.currentTarget.style.transform='scale(1)'; }} />
           <div style={{position: 'absolute', top: '16px', right: '16px', background: 'rgba(169,121,28,.9)', color: '#fff', padding: '8px 14px', borderRadius: '3px', fontSize: '.75rem', fontWeight: '600', letterSpacing: '.05em'}}>SCENIC GETAWAY</div>
         </div>
         <div style={{padding: '28px'}}>

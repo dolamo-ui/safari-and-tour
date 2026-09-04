@@ -963,7 +963,7 @@ export default function AboutPage() {
           </div>
           <div className="footer-col">
             <h4>CONTACT</h4>
-            <span>079 644 5310</span>
+            <span>0632344970</span>
             <span>info@malikantours.co.za</span>
             <span>1717 Kingfisher Street, Marloth Park<br />Kruger National Park</span>
           </div>
