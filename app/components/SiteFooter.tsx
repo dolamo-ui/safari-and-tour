@@ -15,7 +15,7 @@ export default function SiteFooter() {
           {/* ---- SOCIAL LINKS ---- */}
           <div className="site-footer-social" style={{ display: "flex", gap: "12px", marginTop: "20px" }}>
             <a
-              href="https://facebook.com/SitePad"
+              href="https://www.facebook.com/share/1F1XGhWvnJ/?mibextid=wwXIfr"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Facebook"
@@ -80,7 +80,6 @@ export default function SiteFooter() {
           <a href="/tours">Tours &amp; safaris</a>
           <a href="/destination">Destinations</a>
           <a href="/accommodation">Accommodation</a>
-          <a href="/shuttle">Shuttle services</a>
           <a href="/gallery">Gallery</a>
         </div>
         <div className="footer-col">

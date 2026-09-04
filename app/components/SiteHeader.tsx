@@ -7,7 +7,6 @@ const links = [
   ["TOURS & SAFARIS", "/tours"],
   ["DESTINATIONS", "/destination"],
   ["ACCOMMODATION", "/accommodation"],
-  ["SHUTTLE", "/shuttle"],
   ["ABOUT US", "/about"],
   ["GALLERY", "/gallery"],
   ["CONTACT US", "/contact"],

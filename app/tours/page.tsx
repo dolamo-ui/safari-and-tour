@@ -22,7 +22,7 @@ const TOURS: Tour[] = [
   {
     name: "Kruger National Park Safari",
     tagline: "Big Five game drives, sunrise to sunset",
-    image: "hero.jpg",
+    image: "https://i.imgur.com/RZwgEEu.jpeg",
     tag: "SAFARI",
     category: "safari",
     location: "Mpumalanga",
@@ -36,7 +36,7 @@ const TOURS: Tour[] = [
   {
     name: "Sun City & Nature Getaway",
     tagline: "Luxury escape into leisure & wildlife",
-    image: "hero.jpg",
+    image: "https://i.imgur.com/t3cwwyS.jpeg",
     tag: "LUXURY ESCAPE",
     category: "safari",
     location: "North West",
@@ -50,7 +50,7 @@ const TOURS: Tour[] = [
   {
     name: "Qwa Qwa Retreat",
     tagline: "Lefatshe la Basotho — land of the Basotho",
-    image: "hero2.jpg",
+    image: "https://i.imgur.com/cUIT53i.jpeg",
     tag: "CULTURAL RETREAT",
     category: "culture",
     location: "Free State",
@@ -64,7 +64,7 @@ const TOURS: Tour[] = [
   {
     name: "Mpumalanga Retreat",
     tagline: "Place of the rising sun",
-    image: "hero3.jpg",
+    image: "https://i.imgur.com/dFA2NvU.jpeg",
     tag: "SCENIC GETAWAY",
     category: "adventure",
     location: "Graskop",
@@ -78,7 +78,7 @@ const TOURS: Tour[] = [
   {
     name: "Cape Winelands Weekend",
     tagline: "Vineyards, valleys and long lunches",
-    image: "gallery1.jpg",
+    image: "https://i.imgur.com/LArpTnG.jpeg ",
     tag: "DAY TOUR",
     category: "day",
     location: "Western Cape",
@@ -92,7 +92,7 @@ const TOURS: Tour[] = [
   {
     name: "Drakensberg Hiking Escape",
     tagline: "Trails through the highest range in the region",
-    image: "gallery2.jpg",
+    image: "https://i.imgur.com/3QIIRmw.jpeg ",
     tag: "ADVENTURE",
     category: "adventure",
     location: "KwaZulu-Natal",
@@ -106,7 +106,7 @@ const TOURS: Tour[] = [
   {
     name: "Soweto Heritage Tour",
     tagline: "History, food and conversation in the township that shaped a nation",
-    image: "gallery3.jpg",
+    image: "https://i.imgur.com/et8pwrl.jpeg ",
     tag: "DAY TOUR",
     category: "culture",
     location: "Johannesburg",
@@ -120,7 +120,7 @@ const TOURS: Tour[] = [
   {
     name: "Blyde River Canyon Day Trip",
     tagline: "One of the world's largest green canyons",
-    image: "gallery4.jpg",
+    image: "https://i.imgur.com/43BxBUI.jpeg",
     tag: "DAY TOUR",
     category: "day",
     location: "Mpumalanga",
@@ -134,7 +134,7 @@ const TOURS: Tour[] = [
   {
     name: "Victoria Falls Crossing",
     tagline: "Permits, transfers and pacing — fully handled",
-    image: "gallery5.jpg",
+    image: "https://i.imgur.com/rLkAZSC.jpeg",
     tag: "CROSS-BORDER",
     category: "adventure",
     location: "Zimbabwe / Zambia",
@@ -329,13 +329,13 @@ export default function ToursPage() {
         </a>
         <a href="tel:0796445310" className="flex items-center gap-2 link-underline hover:text-[#C9A227] transition-colors duration-300">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#C9A227]"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          <span>0796445310</span>
+          <span>0632344970</span>
         </a>
       </div>
       <div className="flex items-center gap-4 text-[#C9C2B4]">
         <span className="hidden sm:inline tracking-widest text-[11px] opacity-70 uppercase">Connect with us</span>
         <div className="flex items-center gap-3">
-          <a href="https://facebook.com/SitePad" target="_blank" rel="noopener noreferrer" aria-label="facebook" className="w-7 h-7 rounded-full flex items-center justify-center bg-[#C9A227]/10 border border-[#C9A227]/30 text-[#C9A227] hover:bg-[#C9A227] hover:text-[#14110B] transition-all duration-300 hover:scale-110">
+          <a href="https://www.facebook.com/share/1F1XGhWvnJ/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" aria-label="facebook" className="w-7 h-7 rounded-full flex items-center justify-center bg-[#C9A227]/10 border border-[#C9A227]/30 text-[#C9A227] hover:bg-[#C9A227] hover:text-[#14110B] transition-all duration-300 hover:scale-110">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
           </a>
           <a href="https://www.instagram.com/malikan_tours?igsi=YzMzMDh5M3R4a3V3&utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="instagram" className="w-7 h-7 rounded-full flex items-center justify-center bg-[#C9A227]/10 border border-[#C9A227]/30 text-[#C9A227] hover:bg-[#C9A227] hover:text-[#14110B] transition-all duration-300 hover:scale-110">
@@ -380,7 +380,7 @@ export default function ToursPage() {
           </span>
           <div className="leading-tight">
             <p className="overline-label text-[11px]">Call us</p>
-            <a href="tel:0796445310" className="text-[12px] text-white font-medium hover:text-[#C9A227] transition-colors duration-300">+27 796 445 310</a>
+            <a href="tel:0796445310" className="text-[12px] text-white font-medium hover:text-[#C9A227] transition-colors duration-300">+27 63 234 4970</a>
           </div>
         </div>
       </div>
@@ -435,7 +435,7 @@ export default function ToursPage() {
       <div className="mt-auto p-5 border-t border-[#C9A227]/20 text-[13px] text-white/70 space-y-3">
         <a href="tel:0796445310" className="flex items-center gap-2 hover:text-[#C9A227] transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#C9A227] flex-shrink-0"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          0796445310
+          0632344970
         </a>
         <a href="mailto:info@malikantours.co.za" className="flex items-center gap-2 hover:text-[#C9A227] transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#C9A227] flex-shrink-0"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
@@ -536,7 +536,9 @@ export default function ToursPage() {
       {filteredTours.map((t) => (
         <article key={t.name} className="tour-card reveal is-visible">
           <div className="tour-media">
-            <img src={`/${t.image}`} alt={t.name} />
+            <a href="/booking" aria-label={`Book ${t.name}`} style={{ display: 'block', width: '100%', height: '100%' }}>
+              <img src={`/${t.image}`} alt={t.name} style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.35s ease' }} />
+            </a>
             <span className="tour-tag">{t.tag}</span>
           </div>
           <div className="tour-body">

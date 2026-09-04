@@ -7,7 +7,7 @@ const destinations = [
     name: "Kruger National Park",
     region: "mpumalanga",
     regionLabel: "Mpumalanga",
-    image: "/hero.jpg",
+    image: "https://i.imgur.com/RZwgEEu.jpeg ",
     tag: "SAFARI",
     desc: "Big Five territory. Sunrise game drives, bushveld lodges, and fourteen years of guiding knowledge across nearly 20,000 km² of wilderness.",
     link: "/tours",
@@ -16,7 +16,7 @@ const destinations = [
     name: "Pilanesberg Nature Reserve",
     region: "northwest",
     regionLabel: "North West",
-    image: "/hero.jpg",
+    image: "https://i.imgur.com/t3cwwyS.jpeg ",
     tag: "WILDLIFE",
     desc: "A volcanic crater turned wildlife sanctuary just two hours from Johannesburg. Perfect for day trips and weekend escapes with guaranteed sightings.",
     link: "/tours",
@@ -25,7 +25,7 @@ const destinations = [
     name: "Johannesburg & Soweto",
     region: "gauteng",
     regionLabel: "Gauteng",
-    image: "/gallery3.jpg",
+    image: "https://i.imgur.com/et8pwrl.jpeg",
     tag: "CULTURE",
     desc: "Vilakazi Street, the Hector Pieterson Memorial, and shared meals with local families. History told by the people who lived it, not just read it.",
     link: "/tours",
@@ -34,7 +34,7 @@ const destinations = [
     name: "Sun City Resort",
     region: "northwest",
     regionLabel: "North West",
-    image: "/hero.jpg",
+    image: " https://i.imgur.com/t3cwwyS.jpeg",
     tag: "LUXURY",
     desc: "The Valley of Waves, championship golf, and casino entertainment set against the Pilanesberg backdrop. A leisure destination that surprises first-timers.",
     link: "/tours",
@@ -43,7 +43,7 @@ const destinations = [
     name: "Qwa Qwa & Golden Gate",
     region: "freestate",
     regionLabel: "Free State",
-    image: "/hero2.jpg",
+    image: "https://i.imgur.com/cUIT53i.jpeg",
     tag: "CULTURAL RETREAT",
     desc: "Basotho Cultural Village, sandstone cliffs, and highland air. A retreat into the mountains where tradition and landscape meet at 1,800 metres.",
     link: "/tours",
@@ -52,7 +52,7 @@ const destinations = [
     name: "Mpumalanga Panorama Route",
     region: "mpumalanga",
     regionLabel: "Mpumalanga",
-    image: "/hero3.jpg",
+    image: "https://i.imgur.com/dFA2NvU.jpeg ",
     tag: "SCENIC",
     desc: "God's Window, Bourke's Luck Potholes, Blyde River Canyon and the Three Rondavels. One of the world's great green canyons, guided at your pace.",
     link: "/tours",
@@ -61,7 +61,7 @@ const destinations = [
     name: "Cape Winelands",
     region: "westerncape",
     regionLabel: "Western Cape",
-    image: "/gallery1.jpg",
+    image: "https://i.imgur.com/LArpTnG.jpeg ",
     tag: "WINE & DINE",
     desc: "Stellenbosch and Franschhoek — three tastings, a cellar tour and a long lunch among the vines. Return transport from Cape Town included.",
     link: "/tours",
@@ -70,7 +70,7 @@ const destinations = [
     name: "Drakensberg",
     region: "kwazulu",
     regionLabel: "KwaZulu-Natal",
-    image: "/gallery2.jpg",
+    image: "https://i.imgur.com/3QIIRmw.jpeg ",
     tag: "ADVENTURE",
     desc: "The highest mountain range in Southern Africa. Moderate-to-good fitness trails, mountain lodge stays, and two full days above the clouds.",
     link: "/tours",
@@ -79,7 +79,7 @@ const destinations = [
     name: "Victoria Falls",
     region: "crossborder",
     regionLabel: "Zimbabwe / Zambia",
-    image: "/gallery5.jpg",
+    image: "https://i.imgur.com/rLkAZSC.jpeg",
     tag: "CROSS-BORDER",
     desc: "The Smoke That Thunders. We handle permits, transfers and pacing so you just show up. Optional white-water rafting and sunset cruises available.",
     link: "/tours",
@@ -225,7 +225,7 @@ export default function DestinationsPage() {
               </span>
               <div className="flex items-center gap-3">
                 <a
-                  href="https://facebook.com/SitePad"
+                  href="https://www.facebook.com/share/1F1XGhWvnJ/?mibextid=wwXIfr"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="facebook"

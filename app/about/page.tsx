@@ -185,7 +185,7 @@ export default function AboutPage() {
               </span>
               <div className="flex items-center gap-3">
                 <a
-                  href="https://facebook.com/SitePad"
+                  href="https://www.facebook.com/share/1F1XGhWvnJ/?mibextid=wwXIfr"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="facebook"

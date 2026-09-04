@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useCurrency } from "../lib/currency";
 
 const galleryImages = [
-  { src: "/hero.jpg", alt: "Kruger sunrise over the savanna" },
+  { src: "https://i.imgur.com/RZwgEEu.jpeg", alt: "Kruger sunrise over the savanna" },
   { src: "/gallery.jpg", alt: "Elephant herd at a waterhole" },
   { src: "/gallery1.jpg", alt: "Lion resting in golden grass" },
   { src: "/gallery2.jpg", alt: "Bushveld lodge at dusk" },
@@ -207,7 +207,7 @@ export default function TourPageClient() {
               </span>
               <div className="flex items-center gap-3">
                 <a
-                  href="https://facebook.com/SitePad"
+                  href="https://www.facebook.com/share/1F1XGhWvnJ/?mibextid=wwXIfr"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="facebook"
