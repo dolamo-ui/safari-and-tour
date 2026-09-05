@@ -622,7 +622,7 @@ export default function AboutPage() {
         <div className="wrap story-grid">
           <div className="story-media reveal">
             <img
-              src="/image.JPG"
+              src="https://i.imgur.com/zWClo3a.jpeg"
               alt="Malikan, founder of Malikan Tours, on a guided safari"
             />
           </div>
