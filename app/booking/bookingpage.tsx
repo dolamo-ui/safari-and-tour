@@ -3,10 +3,21 @@
 import { useEffect, useState } from "react";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../lib/firebase";
-import { useCurrency } from "../lib/currency";
+
+const bookingTours = [
+  { id: "qwaqwa", name: "Qwa Qwa Retreat", price: 689 },
+  { id: "mpumalanga", name: "Mpumalanga Retreat", price: 689 },
+  { id: "suncity", name: "Sun City & Nature Getaway", price: 501 },
+  { id: "vaal-luxury", name: "Vaal River Luxury Getaway", price: 81.41 },
+  { id: "durban", name: "Durban — Kingdom of the Zulu", price: 939.32 },
+  { id: "maletsunyane", name: "Maletsunyane Braai Festival", price: 751.46 },
+  { id: "vaal-cruise", name: "Vaal River Father's Day Cruise", price: 125.25 },
+] as const;
+
+const tourNames = Object.fromEntries(bookingTours.map((item) => [item.id, item.name]));
+const tourPrices = Object.fromEntries(bookingTours.map((item) => [item.id, item.price]));
 
 export default function BookingPage() {
-  const { formatPrice } = useCurrency();
   const [currentStep, setCurrentStep] = useState(1);
   const [guests, setGuests] = useState(2);
   const [tour, setTour] = useState("");
@@ -19,33 +30,7 @@ export default function BookingPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
-  const today = new Date().toISOString().split("T")[0];
-
-  const tourNames: Record<string, string> = {
-    kruger: "Kruger National Park Safari",
-    suncity: "Sun City & Nature Getaway",
-    qwaqwa: "Qwa Qwa Retreat",
-    mpumalanga: "Mpumalanga Retreat",
-    winelands: "Cape Winelands Weekend",
-    drakensberg: "Drakensberg Hiking Escape",
-    soweto: "Soweto Heritage Tour",
-    blyde: "Blyde River Canyon Day Trip",
-    vicfalls: "Victoria Falls Crossing",
-  };
-
-  // Per-person price for each tour, matching the Step 1 dropdown labels.
-  // Used to store an estimated total alongside the booking.
-  const tourPrices: Record<string, number> = {
-    kruger: 6500,
-    suncity: 4000,
-    qwaqwa: 5500,
-    mpumalanga: 5500,
-    winelands: 1800,
-    drakensberg: 5200,
-    soweto: 950,
-    blyde: 1400,
-    vicfalls: 9800,
-  };
+  const [today, setToday] = useState("");
 
   const updateGuests = (delta: number) => {
     setGuests((g) => Math.max(1, Math.min(20, g + delta)));
@@ -115,6 +100,12 @@ export default function BookingPage() {
   const summaryGuests = `${guests} Guest${guests !== 1 ? "s" : ""}`;
 
   useEffect(() => {
+    setToday(new Date().toISOString().split("T")[0]);
+    const requestedTour = new URLSearchParams(window.location.search).get("tour");
+    if (requestedTour && requestedTour in tourNames) {
+      setTour(requestedTour);
+    }
+
     const nav = document.getElementById("main-nav");
     const onScroll = () => {
       if (!nav) return;
@@ -383,15 +374,11 @@ export default function BookingPage() {
               <label htmlFor="tourSelect">Select Tour *</label>
               <select id="tourSelect" value={tour} onChange={(e) => setTour(e.target.value)} required>
                 <option value="" disabled>Select your tour…</option>
-                <option value="kruger">Kruger National Park Safari — {formatPrice(tourPrices.kruger)} pp</option>
-                <option value="suncity">Sun City &amp; Nature Getaway — {formatPrice(tourPrices.suncity)} pp</option>
-                <option value="qwaqwa">Qwa Qwa Retreat — {formatPrice(tourPrices.qwaqwa)} pp</option>
-                <option value="mpumalanga">Mpumalanga Retreat — {formatPrice(tourPrices.mpumalanga)} pp</option>
-                <option value="winelands">Cape Winelands Weekend — {formatPrice(tourPrices.winelands)} pp</option>
-                <option value="drakensberg">Drakensberg Hiking Escape — {formatPrice(tourPrices.drakensberg)} pp</option>
-                <option value="soweto">Soweto Heritage Tour — {formatPrice(tourPrices.soweto)} pp</option>
-                <option value="blyde">Blyde River Canyon Day Trip — {formatPrice(tourPrices.blyde)} pp</option>
-                <option value="vicfalls">Victoria Falls Crossing — {formatPrice(tourPrices.vicfalls)} pp</option>
+                {bookingTours.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.name} — ${item.price.toLocaleString("en-US")} pp
+                  </option>
+                ))}
               </select>
             </div>
 
