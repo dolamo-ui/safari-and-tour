@@ -350,8 +350,8 @@ export default function Page() {
       <h1 className="h-display">Africa, told by<br />someone who's <em>walked it.</em></h1>
       <p className="lede">Malikan Tours designs journeys across South Africa and the wider continent — grounded in fourteen years of guiding, real relationships with local communities, and prices built for the everyday traveller.</p>
       <div className="hero-actions">
-        <a href="/booking" className="btn btn-primary">Book a tour <span className="btn-arrow">→</span></a>
-        <a href="/" className="btn btn-ghost on-dark">Explore more</a>
+        <a href="/tours" className="btn btn-primary">Book a tour <span className="btn-arrow">→</span></a>
+        <a href="/destination" className="btn btn-ghost on-dark">Explore more</a>
       </div>
     </div>
   </div>
@@ -388,7 +388,7 @@ export default function Page() {
 
 <hr className="divider" />
 
-<section className="section" id="journey" style={{background: 'linear-gradient(135deg, rgba(20,17,11,.88), rgba(20,17,11,.92)), url(\'/background.jpg\') center/cover no-repeat', backgroundSize: 'cover', backgroundAttachment: 'fixed', minHeight: 'auto'}}>
+<section className="section" id="journey" style={{background: 'linear-gradient(135deg, rgba(31, 28, 25, 0.88), rgba(20,17,11,.92)), url(\'/background.jpg\') center/cover no-repeat', backgroundSize: 'cover', backgroundAttachment: 'fixed', minHeight: 'auto'}}>
   <div className="wrap journey-wrap">
     <div className="journey-head reveal">
       <h2 className="h-section">Every trip starts with a route.</h2>
@@ -561,7 +561,7 @@ export default function Page() {
 <section className="section" id="guide">
   <div className="wrap founder">
     <div className="founder-portrait reveal">
-      <img src="/image.JPG" alt="Malikan, founder and lead tourist guide of Malikan Tours" style={{width: '100%', height: '100%', objectFit: 'cover', display: 'block'}} />
+      <img src="/image.jpg" alt="Malikan, founder and lead tourist guide of Malikan Tours" style={{width: '100%', height: '100%', objectFit: 'cover', display: 'block'}} />
       <div className="badge"><span className="num">14+</span><span className="label">Years in tourism</span></div>
     </div>
     <div className="founder-copy reveal">
