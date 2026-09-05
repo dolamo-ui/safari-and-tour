@@ -6,9 +6,14 @@ import { useCurrency } from "../lib/currency";
 /* ==================== Tour data ====================
    Ids and per-person prices match the "Select Tour" dropdown on the
    booking page (see bookingpage.tsx tourNames / tourPrices) so pricing
-   stays consistent across the site. Swap the `image` paths for real
-   photography per tour when it's ready — for now they cycle through
-   the existing /gallery*.jpg assets so nothing renders broken. */
+   stays consistent across the site.
+
+   NOTE ON CURRENCY: most tours below keep their original ZAR base price
+   and go through `formatPrice()` (live ZAR → USD conversion), same as
+   before. The tours sourced from the Thabo Lietsiso flyers are flagged
+   with `currency: "USD"` — their `price` is already a USD number (the
+   flyer's ZAR price, doubled) and is rendered directly as `$amount`,
+   bypassing the ZAR→USD conversion. */
 
 type Category = "Safari" | "Getaway" | "Retreat" | "Hiking" | "Heritage" | "Day Trip" | "Cross-Border";
 
@@ -20,6 +25,9 @@ type Tour = {
   duration: string;
   groupSize: string;
   price: number;
+  /** "USD" = price is already a raw USD number, shown as-is.
+   *  Omitted / "ZAR" = price is a ZAR base value run through formatPrice(). */
+  currency?: "ZAR" | "USD";
   tag: string;
   desc: string;
   image: string;
@@ -30,95 +38,37 @@ const galleryFallbacks = [
   "/gallery1.jpg",
   "/gallery2.jpg",
   "/gallery3.jpg",
-  "/gallery4.jpg",
+  
   "/gallery5.jpg",
   "/gallery7.jpg",
 ];
 
 const tours: Tour[] = [
   {
-    id: "kruger",
-    name: "Kruger National Park Safari",
-    category: "Safari",
-    location: "Kruger National Park",
-    duration: "3 days, 2 nights",
-    groupSize: "2–8 guests",
-    price: 6500,
-    tag: "Signature safari",
-    desc: "Sunrise and sunset game drives across some of the country's densest wildlife territory, with a guide who tracks the bush for a living.",
-    image: galleryFallbacks[0],
-  },
-  {
-    id: "vicfalls",
-    name: "Victoria Falls Crossing",
-    category: "Cross-Border",
-    location: "Zimbabwe & Zambia border",
-    duration: "4 days, 3 nights",
-    groupSize: "2–8 guests",
-    price: 9800,
-    tag: "Cross-border",
-    desc: "A border-crossing route to one of the world's great waterfalls, with time on both the Zimbabwean and Zambian sides of the gorge.",
-    image: galleryFallbacks[1],
-  },
-  {
-    id: "drakensberg",
-    name: "Drakensberg Hiking Escape",
-    category: "Hiking",
-    location: "Drakensberg mountains",
-    duration: "3 days, 2 nights",
-    groupSize: "2–10 guests",
-    price: 5200,
-    tag: "On foot",
-    desc: "Trails through the highest mountain range in Southern Africa, with amphitheatre views and nights spent under proper mountain quiet.",
-    image: galleryFallbacks[2],
-  },
-  {
     id: "qwaqwa",
     name: "Qwa Qwa Retreat",
     category: "Retreat",
-    location: "Free State",
+    location: "Golden Gate, Free State",
     duration: "3 days, 2 nights",
     groupSize: "2–8 guests",
-    price: 5500,
-    tag: "Slow travel",
-    desc: "Sandstone cliffs, wide-open highveld air and an unhurried pace — built for travellers who want space rather than a packed itinerary.",
-    image: galleryFallbacks[3],
+    price: 11000,
+    currency: "USD",
+    tag: "Lefatshe la Basotho",
+    desc: "A half-day tour of a Basotho cultural village, Golden Gate Highlands game park, abseiling and canoeing, with stays at Kaira Lodge. Some activities are seasonal.",
+    image: "https://i.imgur.com/M8aTgcw.jpeg",
   },
   {
     id: "mpumalanga",
     name: "Mpumalanga Retreat",
     category: "Retreat",
-    location: "Mpumalanga",
+    location: "Graskop, Mpumalanga",
     duration: "3 days, 2 nights",
     groupSize: "2–8 guests",
-    price: 5500,
-    tag: "Slow travel",
-    desc: "Escarpment views, waterfalls and forest air on the doorstep of the Lowveld, paired with easy, low-key stays along the route.",
-    image: galleryFallbacks[4],
-  },
-  {
-    id: "blyde",
-    name: "Blyde River Canyon Day Trip",
-    category: "Day Trip",
-    location: "Mpumalanga escarpment",
-    duration: "Full day",
-    groupSize: "2–15 guests",
-    price: 1400,
-    tag: "Day trip",
-    desc: "God's Window, Bourke's Luck Potholes and the canyon's viewpoints, covered in a single well-paced day out of Johannesburg or Kruger.",
-    image: galleryFallbacks[5],
-  },
-  {
-    id: "winelands",
-    name: "Cape Winelands Weekend",
-    category: "Getaway",
-    location: "Stellenbosch & Franschhoek",
-    duration: "2 days, 1 night",
-    groupSize: "2–12 guests",
-    price: 1800,
-    tag: "Weekend",
-    desc: "Cellar visits and long lunches through the Winelands, with a route built around tastings rather than rushing between them.",
-    image: galleryFallbacks[6],
+    price: 11000,
+    currency: "USD",
+    tag: "Place of the rising sun",
+    desc: "A half-day tour of Kruger National Park, three rondovels, God's Window and the Graskop Big Swing, staying at accommodation on or near Graskop along the Panoramic Route.",
+    image: "https://i.imgur.com/dFA2NvU.jpeg",
   },
   {
     id: "suncity",
@@ -127,32 +77,70 @@ const tours: Tour[] = [
     location: "Sun City & Pilanesberg",
     duration: "2 days, 1 night",
     groupSize: "2–10 guests",
-    price: 4000,
+    price: 8000,
+    currency: "USD",
     tag: "Weekend",
-    desc: "Resort time at Sun City paired with a Pilanesberg game drive, a good fit for travellers who want wildlife and downtime in one trip.",
-    image: galleryFallbacks[0],
+    desc: "Resort access and the Valley of Waves at Sun City, a half-day safari at Pilanesberg Nature Reserve, and B&B accommodation at The Kingdom Resort. 3-night (from $16,000) and 4-night (from $12,000) options also available.",
+    image: "https://i.imgur.com/t3cwwyS.jpeg ",
   },
   {
-    id: "soweto",
-    name: "Soweto Heritage Tour",
-    category: "Heritage",
-    location: "Soweto, Johannesburg",
+    id: "vaal-luxury",
+    name: "Vaal River Luxury Getaway",
+    category: "Day Trip",
+    location: "Emerald Resort & Casino, Vaal River",
     duration: "Full day",
     groupSize: "2–15 guests",
-    price: 950,
-    tag: "Heritage",
-    desc: "Vilakazi Street, the Hector Pieterson Memorial and the neighbourhoods around them, told by a guide who grew up with this history.",
-    image: galleryFallbacks[1],
+    price: 1300,
+    currency: "USD",
+    tag: "Full-day package",
+    desc: "A full day at one of South Africa's finest riverside resorts — a buffet spread, the Emerald Zoo and the indoor Aquadome water park. Accommodation and mall pickup available as optional add-ons.",
+    image: "https://i.imgur.com/cerWdZ0.jpeg",
+  },
+  {
+    id: "durban",
+    name: "Durban — Kingdom of the Zulu",
+    category: "Getaway",
+    location: "Durban, KwaZulu-Natal",
+    duration: "3 days, 2 nights",
+    groupSize: "2–10 guests",
+    price: 15000,
+    currency: "USD",
+    tag: "Style and flava",
+    desc: "Moses Mabhida Stadium, beach time on the Golden Mile and a night out at Eyadini Lounge and Max's Chisa Nyama, with accommodation at Garden Court South Beach and transport from Vereeniging.",
+    image: "https://i.imgur.com/bxSyfjp.jpeg ",
+  },
+  {
+    id: "maletsunyane",
+    name: "Maletsunyane Braai Festival",
+    category: "Cross-Border",
+    location: "Semonkong, Lesotho",
+    duration: "3 days, 2 nights",
+    groupSize: "2–15 guests",
+    price: 12000,
+    currency: "USD",
+    tag: "Visa-free SADC country",
+    desc: "A furnished-tent camping festival beside the Maletsunyane Falls — festival and camping tickets, breakfast, a Saturday braai lunch and a goodie bag. Runs 27–29 November 2026, with pickup from selected malls in Gauteng and the Free State.",
+    image: "https://i.imgur.com/FTQUMEc.jpeg",
+  },
+  {
+    id: "vaal-cruise",
+    name: "Vaal River Father's Day Cruise",
+    category: "Day Trip",
+    location: "Vaal River, Vanderbijlpark",
+    duration: "Half day",
+    groupSize: "2–20 guests",
+    price: 2000,
+    currency: "USD",
+    tag: "Father's Day special",
+    desc: "A 2-hour Vaal River boat cruise with a 3-course meal (drinks excluded), plus pickup and drop-off at Vaal Mall. Runs Father's Day, 21 June 2026. Neck, back and foot massages available as a paid add-on.",
+    image: " https://i.imgur.com/5qSy5YJ.jpeg",
   },
 ];
 
 const categoryLabels: { label: string; value: Category | "All" }[] = [
   { label: "All tours", value: "All" },
-  { label: "Safari", value: "Safari" },
   { label: "Getaways", value: "Getaway" },
   { label: "Retreats", value: "Retreat" },
-  { label: "Hiking", value: "Hiking" },
-  { label: "Heritage", value: "Heritage" },
   { label: "Day trips", value: "Day Trip" },
   { label: "Cross-border", value: "Cross-Border" },
 ];
@@ -205,6 +193,11 @@ export default function ToursPage() {
     revealEls.forEach((el) => el.classList.add("is-visible"));
   }, []);
 
+  // Renders a tour's price: USD-flagged tours show the raw number as $amount,
+  // everything else keeps going through the live ZAR → USD formatPrice().
+  const renderPrice = (tour: Tour) =>
+    tour.currency === "USD" ? `$${tour.price.toLocaleString()}` : formatPrice(tour.price);
+
   return (
     <>
       {/* ==================== PAGE HERO ==================== */}
@@ -221,7 +214,7 @@ export default function ToursPage() {
           </span>
           <h1>Tours &amp; safaris across Southern Africa</h1>
           <p className="lede">
-            Nine routes covering safari, hiking, heritage and cross-border travel — each one built
+            Seven routes covering getaways, retreats, day trips and cross-border travel — each one built
             around real budgets and real distances, not a brochure itinerary.
           </p>
         </div>
@@ -365,7 +358,7 @@ export default function ToursPage() {
                     </div>
                     <div className="tour-price-row">
                       <div className="tour-price">
-                        <span className="amt">{formatPrice(tour.price)}</span>
+                        <span className="amt">{renderPrice(tour)}</span>
                         <span className="unit">per person</span>
                       </div>
                       <a href={`/booking?tour=${tour.id}`} className="tour-view">
