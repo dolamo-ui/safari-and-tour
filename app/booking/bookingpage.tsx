@@ -7,11 +7,13 @@ import { db } from "../lib/firebase";
 const bookingTours = [
   { id: "qwaqwa", name: "Qwa Qwa Retreat", price: 689 },
   { id: "mpumalanga", name: "Mpumalanga Retreat", price: 689 },
-  { id: "suncity", name: "Sun City & Nature Getaway", price: 501 },
-  { id: "vaal-luxury", name: "Vaal River Luxury Getaway", price: 81.41 },
+  { id: "kruger", name: "Kruger National Park Safari", price: 715 },
+  { id: "pilanesberg", name: "Pilanesberg Nature Reserve", price: 501 },
   { id: "durban", name: "Durban — Kingdom of the Zulu", price: 939.32 },
-  { id: "maletsunyane", name: "Maletsunyane Braai Festival", price: 751.46 },
-  { id: "vaal-cruise", name: "Vaal River Father's Day Cruise", price: 125.25 },
+  { id: "soweto", name: "Johannesburg & Soweto", price: 105 },
+  { id: "winelands", name: "Cape Winelands", price: 198 },
+  { id: "drakensberg", name: "Drakensberg Hiking Escape", price: 572 },
+  { id: "vicfalls", name: "Victoria Falls Crossing", price: 1078 },
 ] as const;
 
 const tourNames = Object.fromEntries(bookingTours.map((item) => [item.id, item.name]));
@@ -94,6 +96,9 @@ export default function BookingPage() {
   };
 
   const summaryTour = tourNames[tour] || "Not selected";
+  const summaryPrice = tourPrices[tour] !== undefined
+    ? `$${tourPrices[tour].toLocaleString("en-US")} per person`
+    : "Not selected";
   const summaryDate = tourDate
     ? new Date(tourDate).toLocaleDateString("en-ZA", { day: "numeric", month: "long", year: "numeric" })
     : "Not selected";
@@ -458,6 +463,10 @@ export default function BookingPage() {
               <div style={{display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: "1px solid var(--line)", fontSize: ".92rem"}}>
                 <span style={{color: "var(--ink-dim)"}}>Tour</span>
                 <span style={{color: "var(--ink)", fontWeight: 500}}>{summaryTour}</span>
+              </div>
+              <div style={{display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: "1px solid var(--line)", fontSize: ".92rem"}}>
+                <span style={{color: "var(--ink-dim)"}}>Price</span>
+                <span style={{color: "var(--ink)", fontWeight: 500}}>{summaryPrice}</span>
               </div>
               <div style={{display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: "1px solid var(--line)", fontSize: ".92rem"}}>
                 <span style={{color: "var(--ink-dim)"}}>Date</span>
