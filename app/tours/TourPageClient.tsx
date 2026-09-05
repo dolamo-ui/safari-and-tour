@@ -191,7 +191,7 @@ export default function ToursPage() {
       return () => io.disconnect();
     }
     revealEls.forEach((el) => el.classList.add("is-visible"));
-  }, []);
+  }, [filteredTours]);
 
   // Renders a tour's price: USD-flagged tours show the raw number as $amount,
   // everything else keeps going through the live ZAR → USD formatPrice().
