@@ -196,7 +196,7 @@ export default function ToursPage() {
   // Renders a tour's price: USD-flagged tours show the raw number as $amount,
   // everything else keeps going through the live ZAR → USD formatPrice().
   const renderPrice = (tour: Tour) =>
-    tour.currency === "USD" ? `$${tour.price.toLocaleString()}` : formatPrice(tour.price);
+    tour.currency === "USD" ? `$${tour.price.toLocaleString("en-US")}` : formatPrice(tour.price);
 
   return (
     <>
