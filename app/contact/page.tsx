@@ -8,16 +8,43 @@
 import { useEffect, useState } from "react";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../lib/firebase"; // adjust path if your firebase.js lives elsewhere
+import { phoneHref, whatsappHref } from "../lib/siteSettings";
+import { useContactSettings } from "../components/useContactSettings";
+
+// Countries most relevant to a South African tour operator: home market first,
+// then the countries international guests most commonly enquire from.
+const countries = [
+  { code: "ZA", dial: "+27", name: "South Africa" },
+  { code: "US", dial: "+1", name: "United States" },
+  { code: "GB", dial: "+44", name: "United Kingdom" },
+  { code: "ZW", dial: "+263", name: "Zimbabwe" },
+  { code: "NA", dial: "+264", name: "Namibia" },
+  { code: "BW", dial: "+267", name: "Botswana" },
+  { code: "MZ", dial: "+258", name: "Mozambique" },
+  { code: "LS", dial: "+266", name: "Lesotho" },
+  { code: "SZ", dial: "+268", name: "Eswatini" },
+  { code: "AU", dial: "+61", name: "Australia" },
+  { code: "CA", dial: "+1", name: "Canada" },
+  { code: "DE", dial: "+49", name: "Germany" },
+  { code: "NL", dial: "+31", name: "Netherlands" },
+  { code: "FR", dial: "+33", name: "France" },
+] as const;
+
+const dialCodeByCountry = Object.fromEntries(countries.map((c) => [c.code, c.dial]));
+const countryNameByCode = Object.fromEntries(countries.map((c) => [c.code, c.name]));
 
 export default function ContactPage() {
+  const { phone, alternativePhone } = useContactSettings();
+
   // ---- Contact form state ----
-  const [formData, setFormData] = useState({ name: "", email: "", phone: "", message: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", country: "ZA", phone: "", altPhone: "", message: "" });
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const value = e.target.name === "phone" ? e.target.value.replace(/\D/g, "") : e.target.value;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const isDigitsField = e.target.name === "phone" || e.target.name === "altPhone";
+    const value = isDigitsField ? e.target.value.replace(/\D/g, "") : e.target.value;
     setFormData((prev) => ({ ...prev, [e.target.name]: value }));
   };
 
@@ -31,17 +58,22 @@ export default function ContactPage() {
       setSubmitting(false);
       return;
     }
+    const dialCode = dialCodeByCountry[formData.country] ?? "";
+    const fullPhone = formData.phone.trim() ? `${dialCode} ${formData.phone.trim()}`.trim() : "";
+    const fullAltPhone = formData.altPhone.trim() ? `${dialCode} ${formData.altPhone.trim()}`.trim() : "";
     try {
       await addDoc(collection(db, "contactMessages"), {
         name: formData.name.trim(),
         email: formData.email.trim(),
-        phone: formData.phone.trim(),
+        country: countryNameByCode[formData.country] ?? formData.country,
+        phone: fullPhone,
+        altPhone: fullAltPhone,
         message: formData.message.trim(),
         status: "new", // new | read | resolved
         createdAt: serverTimestamp(),
       });
       setSubmitted(true);
-      setFormData({ name: "", email: "", phone: "", message: "" });
+      setFormData({ name: "", email: "", country: "ZA", phone: "", altPhone: "", message: "" });
     } catch (err) {
       console.error(err);
       setSubmitError("Something went wrong sending your message. Please try again or email us directly at info@malikantours.co.za.");
@@ -189,9 +221,9 @@ export default function ContactPage() {
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#C9A227]"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
           <span className="hidden sm:inline">info@malikantours.co.za</span>
         </a>
-        <a href="tel:0632344970" className="flex items-center gap-2 link-underline hover:text-[#C9A227] transition-colors duration-300">
+        <a href={phoneHref(phone)} className="flex items-center gap-2 link-underline hover:text-[#C9A227] transition-colors duration-300">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#C9A227]"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          <span>063 234 4970</span>
+          <span>{phone}</span>
         </a>
       </div>
       <div className="flex items-center gap-4 text-[#C9C2B4]">
@@ -242,7 +274,7 @@ export default function ContactPage() {
           </span>
           <div className="leading-tight">
             <p className="overline-label text-[11px]">Call us</p>
-            <a href="tel:0796445310" className="text-[12px] text-white font-medium hover:text-[#C9A227] transition-colors duration-300">+27 63 234 4970</a>
+                    <a href={phoneHref(phone)} className="text-[12px] text-white font-medium hover:text-[#C9A227] transition-colors duration-300">{phone}</a>
           </div>
         </div>
       </div>
@@ -295,10 +327,11 @@ export default function ContactPage() {
         <a href="/booking" className="inline-flex items-center justify-center gap-2 bg-[#22c55e] text-[#0b1f0d] px-5 py-3 mt-6 text-[12px] font-semibold tracking-[0.08em] uppercase rounded-full shadow-[0_12px_30px_rgba(34,197,94,0.35)]">🟢 BOOK NOW</a>
       </nav>
       <div className="mt-auto p-5 border-t border-[#C9A227]/20 text-[13px] text-white/70 space-y-3">
-        <a href="tel:0796445310" className="flex items-center gap-2 hover:text-[#C9A227] transition-colors">
+        <a href={phoneHref(phone)} className="flex items-center gap-2 hover:text-[#C9A227] transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#C9A227] flex-shrink-0"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          0632344970
+          {phone}
         </a>
+        {alternativePhone && <a href={phoneHref(alternativePhone)} className="flex items-center gap-2 hover:text-[#C9A227] transition-colors">{alternativePhone}</a>}
         <a href="mailto:info@malikantours.co.za" className="flex items-center gap-2 hover:text-[#C9A227] transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#C9A227] flex-shrink-0"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
           info@malikantours.co.za
@@ -324,7 +357,7 @@ export default function ContactPage() {
       <h1 className="h-display">Get in <em>Touch</em></h1>
       <p className="lede">Let&apos;s plan your next adventure. Whether it&apos;s a weekend escape or a cross-border journey, we&apos;re here to map it out with you.</p>
       <div className="hero-actions">
-        <a href="tel:0632344970" className="btn btn-primary">Call us now <span className="btn-arrow">→</span></a>
+        <a href={phoneHref(phone)} className="btn btn-primary">Call us now <span className="btn-arrow">→</span></a>
         <a href="mailto:info@malikantours.co.za" className="btn btn-ghost on-dark">Send an email</a>
       </div>
     </div>
@@ -349,7 +382,8 @@ export default function ContactPage() {
           </div>
           <div className="contact-info">
             <h4>Phone</h4>
-            <a href="tel:0632344970">063 234 4970</a>
+            <a href={phoneHref(phone)}>{phone}</a>
+            {alternativePhone && <a href={phoneHref(alternativePhone)}>{alternativePhone}</a>}
           </div>
         </div>
 
@@ -379,7 +413,7 @@ export default function ContactPage() {
           </div>
           <div className="contact-info">
             <h4>WhatsApp</h4>
-            <a href="https://wa.me/27632344970" target="_blank" rel="noopener noreferrer">+27 63 234 4970</a>
+            <a href={whatsappHref(phone)} target="_blank" rel="noopener noreferrer">{phone}</a>
             <p style={{fontSize: '.8rem', marginTop: '4px', color: 'var(--ink-faint)'}}>Message us anytime — we reply within a few hours.</p>
           </div>
         </div>
@@ -433,8 +467,52 @@ export default function ContactPage() {
                 <input type="email" id="email" name="email" placeholder="you@example.com" value={formData.email} onChange={handleChange} required />
               </div>
               <div className="form-group">
+                <label htmlFor="country">Country</label>
+                <select id="country" name="country" value={formData.country} onChange={handleChange}>
+                  {countries.map((c) => (
+                    <option key={c.code} value={c.code}>
+                      {c.name} ({c.dial})
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group">
                 <label htmlFor="phone">Phone Number</label>
-                <input type="tel" id="phone" name="phone" inputMode="numeric" pattern="[0-9]*" placeholder="063 234 4970" value={formData.phone} onChange={handleChange} />
+                <div style={{ display: "flex", alignItems: "stretch", gap: "8px" }}>
+                  <span style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "0 12px",
+                    border: "1px solid var(--line)",
+                    borderRadius: "4px",
+                    background: "var(--bg-warm)",
+                    color: "var(--ink-dim)",
+                    fontSize: ".92rem",
+                    whiteSpace: "nowrap",
+                  }}>
+                    {dialCodeByCountry[formData.country]}
+                  </span>
+                  <input type="tel" id="phone" name="phone" inputMode="numeric" pattern="[0-9]*" placeholder="63 234 4970" value={formData.phone} onChange={handleChange} style={{ flex: 1 }} />
+                </div>
+              </div>
+              <div className="form-group">
+                <label htmlFor="altPhone">Alternative Phone (optional)</label>
+                <div style={{ display: "flex", alignItems: "stretch", gap: "8px" }}>
+                  <span style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "0 12px",
+                    border: "1px solid var(--line)",
+                    borderRadius: "4px",
+                    background: "var(--bg-warm)",
+                    color: "var(--ink-dim)",
+                    fontSize: ".92rem",
+                    whiteSpace: "nowrap",
+                  }}>
+                    {dialCodeByCountry[formData.country]}
+                  </span>
+                  <input type="tel" id="altPhone" name="altPhone" inputMode="numeric" pattern="[0-9]*" placeholder="e.g. WhatsApp number" value={formData.altPhone} onChange={handleChange} style={{ flex: 1 }} />
+                </div>
               </div>
               <div className="form-group">
                 <label htmlFor="message">Your Message *</label>

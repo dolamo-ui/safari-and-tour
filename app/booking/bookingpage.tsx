@@ -19,13 +19,37 @@ const bookingTours = [
 const tourNames = Object.fromEntries(bookingTours.map((item) => [item.id, item.name]));
 const tourPrices = Object.fromEntries(bookingTours.map((item) => [item.id, item.price]));
 
+// Countries most relevant to a South African tour operator: home market first,
+// then the countries international guests most commonly book from.
+const countries = [
+  { code: "ZA", dial: "+27", name: "South Africa" },
+  { code: "US", dial: "+1", name: "United States" },
+  { code: "GB", dial: "+44", name: "United Kingdom" },
+  { code: "ZW", dial: "+263", name: "Zimbabwe" },
+  { code: "NA", dial: "+264", name: "Namibia" },
+  { code: "BW", dial: "+267", name: "Botswana" },
+  { code: "MZ", dial: "+258", name: "Mozambique" },
+  { code: "LS", dial: "+266", name: "Lesotho" },
+  { code: "SZ", dial: "+268", name: "Eswatini" },
+  { code: "AU", dial: "+61", name: "Australia" },
+  { code: "CA", dial: "+1", name: "Canada" },
+  { code: "DE", dial: "+49", name: "Germany" },
+  { code: "NL", dial: "+31", name: "Netherlands" },
+  { code: "FR", dial: "+33", name: "France" },
+] as const;
+
+const dialCodeByCountry = Object.fromEntries(countries.map((c) => [c.code, c.dial]));
+const countryNameByCode = Object.fromEntries(countries.map((c) => [c.code, c.name]));
+
 export default function BookingPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [guests, setGuests] = useState(2);
   const [tour, setTour] = useState("");
   const [tourDate, setTourDate] = useState("");
   const [custName, setCustName] = useState("");
+  const [custCountry, setCustCountry] = useState<string>("ZA");
   const [custPhone, setCustPhone] = useState("");
+  const [custAltPhone, setCustAltPhone] = useState("");
   const [custEmail, setCustEmail] = useState("");
   const [specialRequests, setSpecialRequests] = useState("");
   const [refNum, setRefNum] = useState("0000");
@@ -66,6 +90,9 @@ export default function BookingPage() {
 
     const newRefNum = String(Math.floor(1000 + Math.random() * 9000));
     const pricePerPerson = tourPrices[tour] ?? 0;
+    const dialCode = dialCodeByCountry[custCountry] ?? "";
+    const fullPhone = `${dialCode} ${custPhone}`.trim();
+    const fullAltPhone = custAltPhone ? `${dialCode} ${custAltPhone}`.trim() : "";
 
     setIsSubmitting(true);
     try {
@@ -78,7 +105,9 @@ export default function BookingPage() {
         pricePerPerson,
         estimatedTotal: pricePerPerson * guests,
         customerName: custName,
-        customerPhone: custPhone,
+        customerCountry: countryNameByCode[custCountry] ?? custCountry,
+        customerPhone: fullPhone,
+        customerAltPhone: fullAltPhone,
         customerEmail: custEmail,
         specialRequests,
         status: "pending",
@@ -414,14 +443,60 @@ export default function BookingPage() {
             <p className="lede" style={{marginTop: "12px", marginBottom: "34px", fontSize: ".98rem"}}>Tell us who you are and how to reach you.</p>
             <p style={{marginBottom: "24px", color: "var(--ink-dim)", fontSize: ".88rem"}}><strong>Fields marked with * are required</strong></p>
 
+            <div className="form-field">
+              <label htmlFor="custName">Full Name *</label>
+              <input type="text" id="custName" placeholder="e.g. Thabo Molefe" value={custName} onChange={(e) => setCustName(e.target.value)} required />
+            </div>
+
+            <div className="form-field">
+              <label htmlFor="custCountry">Country *</label>
+              <select id="custCountry" value={custCountry} onChange={(e) => setCustCountry(e.target.value)} required>
+                {countries.map((c) => (
+                  <option key={c.code} value={c.code}>
+                    {c.name} ({c.dial})
+                  </option>
+                ))}
+              </select>
+            </div>
+
             <div className="form-grid">
               <div className="form-field">
-                <label htmlFor="custName">Full Name *</label>
-                <input type="text" id="custName" placeholder="e.g. Thabo Molefe" value={custName} onChange={(e) => setCustName(e.target.value)} required />
+                <label htmlFor="custPhone">Phone Number *</label>
+                <div className="phone-input-group" style={{display: "flex", alignItems: "stretch", gap: "8px"}}>
+                  <span style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "0 12px",
+                    border: "1px solid var(--line)",
+                    borderRadius: "4px",
+                    background: "var(--bg-warm)",
+                    color: "var(--ink-dim)",
+                    fontSize: ".92rem",
+                    whiteSpace: "nowrap",
+                  }}>
+                    {dialCodeByCountry[custCountry]}
+                  </span>
+                  <input type="tel" id="custPhone" inputMode="numeric" pattern="[0-9]*" placeholder="e.g. 796445310" value={custPhone} onChange={(e) => setCustPhone(e.target.value.replace(/\D/g, ""))} required style={{flex: 1}} />
+                </div>
               </div>
               <div className="form-field">
-                <label htmlFor="custPhone">Phone Number *</label>
-                <input type="tel" id="custPhone" inputMode="numeric" pattern="[0-9]*" placeholder="e.g. 0796445310" value={custPhone} onChange={(e) => setCustPhone(e.target.value.replace(/\D/g, ""))} required />
+                <label htmlFor="custAltPhone">Alternative Phone (optional)</label>
+                <div className="phone-input-group" style={{display: "flex", alignItems: "stretch", gap: "8px"}}>
+                  <span style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "0 12px",
+                    border: "1px solid var(--line)",
+                    borderRadius: "4px",
+                    background: "var(--bg-warm)",
+                    color: "var(--ink-dim)",
+                    fontSize: ".92rem",
+                    whiteSpace: "nowrap",
+                  }}>
+                    {dialCodeByCountry[custCountry]}
+                  </span>
+                  <input type="tel" id="custAltPhone" inputMode="numeric" pattern="[0-9]*" placeholder="e.g. WhatsApp number" value={custAltPhone} onChange={(e) => setCustAltPhone(e.target.value.replace(/\D/g, ""))} style={{flex: 1}} />
+                </div>
               </div>
             </div>
 

@@ -1,4 +1,11 @@
+"use client";
+
+import { phoneHref } from "../lib/siteSettings";
+import { useContactSettings } from "./useContactSettings";
+
 export default function SiteFooter() {
+  const { phone, alternativePhone } = useContactSettings();
+
   return (
     <footer className="site-global-footer site-footer">
       <div className="wrap footer-grid">
@@ -90,7 +97,8 @@ export default function SiteFooter() {
         </div>
         <div className="footer-col">
           <h4>CONTACT</h4>
-          <a href="tel:0632344970">063 234 4970</a>
+          <a href={phoneHref(phone)}>{phone}</a>
+          {alternativePhone && <a href={phoneHref(alternativePhone)}>{alternativePhone}</a>}
           <a href="mailto:info@malikantours.co.za">info@malikantours.co.za</a>
           <span>
             1717 Kingfisher Street, Marloth Park

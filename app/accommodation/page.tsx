@@ -77,6 +77,28 @@ const accomLabels: Record<string, string> = {
   group: "Group Booking",
 };
 
+// Countries most relevant to a South African tour operator: home market first,
+// then the countries international guests most commonly book from.
+const countries = [
+  { code: "ZA", dial: "+27", name: "South Africa" },
+  { code: "US", dial: "+1", name: "United States" },
+  { code: "GB", dial: "+44", name: "United Kingdom" },
+  { code: "ZW", dial: "+263", name: "Zimbabwe" },
+  { code: "NA", dial: "+264", name: "Namibia" },
+  { code: "BW", dial: "+267", name: "Botswana" },
+  { code: "MZ", dial: "+258", name: "Mozambique" },
+  { code: "LS", dial: "+266", name: "Lesotho" },
+  { code: "SZ", dial: "+268", name: "Eswatini" },
+  { code: "AU", dial: "+61", name: "Australia" },
+  { code: "CA", dial: "+1", name: "Canada" },
+  { code: "DE", dial: "+49", name: "Germany" },
+  { code: "NL", dial: "+31", name: "Netherlands" },
+  { code: "FR", dial: "+33", name: "France" },
+] as const;
+
+const dialCodeByCountry = Object.fromEntries(countries.map((c) => [c.code, c.dial]));
+const countryNameByCode = Object.fromEntries(countries.map((c) => [c.code, c.name]));
+
 export default function AccommodationPage() {
   const checkinRef = useRef<HTMLInputElement>(null);
   const checkoutRef = useRef<HTMLInputElement>(null);
@@ -84,6 +106,7 @@ export default function AccommodationPage() {
   const [submitError, setSubmitError] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [refNum, setRefNum] = useState("0000");
+  const [country, setCountry] = useState<string>("ZA");
 
   useEffect(() => {
     const revealEls = document.querySelectorAll(".reveal");
@@ -138,10 +161,12 @@ export default function AccommodationPage() {
     const accomType = formData.get("accom-type") as string;
     const fullName = formData.get("fullname") as string;
     const email = formData.get("email") as string;
+    const countryCode = formData.get("country") as string;
     const phone = formData.get("phone") as string;
+    const altPhone = formData.get("altphone") as string;
     const requests = formData.get("requests") as string;
 
-    if (!checkIn || !checkOut || !accomType || !fullName || !email || !phone) {
+    if (!checkIn || !checkOut || !accomType || !fullName || !email || !phone || !countryCode) {
       setSubmitError("Please fill in all required fields.");
       return;
     }
@@ -157,6 +182,9 @@ export default function AccommodationPage() {
       Math.ceil((new Date(checkOut).getTime() - new Date(checkIn).getTime()) / (1000 * 60 * 60 * 24))
     );
     const estimatedTotal = pricePerNight * nights * guests;
+    const dialCode = dialCodeByCountry[countryCode] ?? "";
+    const fullPhone = `${dialCode} ${phone}`.trim();
+    const fullAltPhone = altPhone ? `${dialCode} ${altPhone}`.trim() : "";
 
     setIsSubmitting(true);
     try {
@@ -172,7 +200,9 @@ export default function AccommodationPage() {
         estimatedTotal,
         customerName: fullName,
         customerEmail: email,
-        customerPhone: phone,
+        customerCountry: countryNameByCode[countryCode] ?? countryCode,
+        customerPhone: fullPhone,
+        customerAltPhone: fullAltPhone,
         specialRequests: requests,
         status: "pending",
         createdAt: serverTimestamp(),
@@ -181,6 +211,7 @@ export default function AccommodationPage() {
       setRefNum(newRef);
       setSubmitted(true);
       form.reset();
+      setCountry("ZA");
     } catch (err) {
       console.error(err);
       setSubmitError("Something went wrong saving your booking. Please try again or call 063 234 4970.");
@@ -340,8 +371,54 @@ export default function AccommodationPage() {
                   <input type="email" id="email" name="email" placeholder="you@example.com" required />
                 </div>
                 <div className="accom-form-group">
-                  <label htmlFor="phone">Phone Number *</label>
-                  <input type="tel" id="phone" name="phone" inputMode="numeric" pattern="[0-9]*" placeholder="0632344970" onInput={(e) => { e.currentTarget.value = e.currentTarget.value.replace(/\D/g, ""); }} required />
+                  <label htmlFor="country">Country *</label>
+                  <select id="country" name="country" required value={country} onChange={(e) => setCountry(e.target.value)}>
+                    {countries.map((c) => (
+                      <option key={c.code} value={c.code}>
+                        {c.name} ({c.dial})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="accom-form-row">
+                  <div className="accom-form-group">
+                    <label htmlFor="phone">Phone Number *</label>
+                    <div style={{ display: "flex", alignItems: "stretch", gap: "8px" }}>
+                      <span style={{
+                        display: "flex",
+                        alignItems: "center",
+                        padding: "0 12px",
+                        border: "1px solid var(--line-dark)",
+                        borderRadius: "4px",
+                        background: "rgba(255,255,255,0.04)",
+                        color: "var(--ink-on-dark-dim)",
+                        fontSize: ".92rem",
+                        whiteSpace: "nowrap",
+                      }}>
+                        {dialCodeByCountry[country]}
+                      </span>
+                      <input type="tel" id="phone" name="phone" inputMode="numeric" pattern="[0-9]*" placeholder="796445310" onInput={(e) => { e.currentTarget.value = e.currentTarget.value.replace(/\D/g, ""); }} required style={{ flex: 1 }} />
+                    </div>
+                  </div>
+                  <div className="accom-form-group">
+                    <label htmlFor="altphone">Alternative Phone (optional)</label>
+                    <div style={{ display: "flex", alignItems: "stretch", gap: "8px" }}>
+                      <span style={{
+                        display: "flex",
+                        alignItems: "center",
+                        padding: "0 12px",
+                        border: "1px solid var(--line-dark)",
+                        borderRadius: "4px",
+                        background: "rgba(255,255,255,0.04)",
+                        color: "var(--ink-on-dark-dim)",
+                        fontSize: ".92rem",
+                        whiteSpace: "nowrap",
+                      }}>
+                        {dialCodeByCountry[country]}
+                      </span>
+                      <input type="tel" id="altphone" name="altphone" inputMode="numeric" pattern="[0-9]*" placeholder="e.g. WhatsApp number" onInput={(e) => { e.currentTarget.value = e.currentTarget.value.replace(/\D/g, ""); }} style={{ flex: 1 }} />
+                    </div>
+                  </div>
                 </div>
                 <div className="accom-form-group">
                   <label htmlFor="requests">Special Requests</label>

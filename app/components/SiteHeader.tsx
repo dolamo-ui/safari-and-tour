@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { phoneHref } from "../lib/siteSettings";
+import { useContactSettings } from "./useContactSettings";
 
 const links = [
   ["HOME", "/"],
@@ -16,6 +18,7 @@ export default function SiteHeader() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const { phone, alternativePhone } = useContactSettings();
 
   useEffect(() => {
     const onScroll = () => {
@@ -47,7 +50,8 @@ export default function SiteHeader() {
         <div className="wrap site-topbar-inner">
           <div className="site-topbar-links">
             <a href="mailto:info@malikantours.co.za">info@malikantours.co.za</a>
-            <a href="tel:0632344970">063 234 4970</a>
+            <a href={phoneHref(phone)}>{phone}</a>
+            {alternativePhone && <a href={phoneHref(alternativePhone)}>{alternativePhone}</a>}
           </div>
           <span className="site-topbar-note">Southern Africa, thoughtfully explored</span>
         </div>
@@ -105,7 +109,8 @@ export default function SiteHeader() {
           </nav>
           <a href="/booking" className="site-book-button site-book-button-mobile" onClick={() => setDrawerOpen(false)}>Book now <span aria-hidden="true">→</span></a>
           <div className="site-drawer-contact">
-            <a href="tel:0632344970">063 234 4970</a>
+            <a href={phoneHref(phone)}>{phone}</a>
+            {alternativePhone && <a href={phoneHref(alternativePhone)}>{alternativePhone}</a>}
             <a href="mailto:info@malikantours.co.za">info@malikantours.co.za</a>
           </div>
         </aside>
