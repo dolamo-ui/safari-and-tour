@@ -34,6 +34,7 @@ type Booking = {
   reference?: string;
   guests?: number;
   customerPhone?: string;
+  customerAltPhone?: string;
   customerEmail?: string;
   specialRequests?: string;
   createdAt?: Timestamp;
@@ -286,6 +287,11 @@ function StatusPill({ status, label }: { status: BookingStatus | ContactStatus; 
   return <span className={`status-pill ${cls}`}>{label}</span>;
 }
 
+function DetailField({ label, value }: { label: string; value?: React.ReactNode }) {
+  if (value === undefined || value === null || value === "") return null;
+  return <div className="detail-field"><dt>{label}</dt><dd>{value}</dd></div>;
+}
+
 /* ================================ Page ================================= */
 
 export default function AdminBookingsPage() {
@@ -358,6 +364,19 @@ export default function AdminBookingsPage() {
   const [confirmingDelete, setConfirmingDelete] = useState(false);
   const [toast, setToast] = useState<{ message: string; tone: "error" | "success" } | null>(null);
 
+  useEffect(() => {
+    if (!sidebarOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSidebarOpen(false);
+    };
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [sidebarOpen]);
+
   /* Lightweight themed toast — replaces alert() */
   const showToast = (message: string, tone: "error" | "success" = "error") => {
     setToast({ message, tone });
@@ -398,6 +417,7 @@ export default function AdminBookingsPage() {
             pricePerPerson: typeof data.pricePerPerson === "number" ? data.pricePerPerson : undefined,
             estimatedTotal: typeof data.estimatedTotal === "number" ? data.estimatedTotal : undefined,
             customerPhone: typeof data.customerPhone === "string" ? data.customerPhone : undefined,
+            customerAltPhone: typeof data.customerAltPhone === "string" ? data.customerAltPhone : undefined,
             customerEmail: typeof data.customerEmail === "string" ? data.customerEmail : undefined,
             specialRequests: typeof data.specialRequests === "string" ? data.specialRequests : undefined,
             createdAt: data.createdAt,
@@ -438,6 +458,7 @@ export default function AdminBookingsPage() {
             reference: typeof data.reference === "string" ? data.reference : undefined,
             guests: typeof data.guests === "number" ? data.guests : undefined,
             customerPhone: typeof data.customerPhone === "string" ? data.customerPhone : undefined,
+            customerAltPhone: typeof data.customerAltPhone === "string" ? data.customerAltPhone : undefined,
             customerEmail: typeof data.customerEmail === "string" ? data.customerEmail : undefined,
             specialRequests: typeof data.specialRequests === "string" ? data.specialRequests : undefined,
             createdAt: data.createdAt,
@@ -820,8 +841,41 @@ export default function AdminBookingsPage() {
       {detailOpen && (selectedBooking || selectedMessage) && <div className="admin-detail-backdrop" onClick={closeDetail}>
         <aside className="admin-detail" onClick={(event) => event.stopPropagation()}>
           <button className="detail-close" type="button" onClick={closeDetail} aria-label="Close details">×</button>
-          {selectedBooking && <><h2>{selectedBooking.name}</h2><p>{selectedBooking.title}</p><p>{selectedBooking.customerEmail || "No email"}</p><p>{selectedBooking.customerPhone || "No phone"}</p><StatusPill status={selectedBooking.status} label={selectedBooking.statusLabel} /><div className="detail-actions"><button type="button" onClick={() => updateStatus("confirmed")} disabled={updating}>Confirm</button><button type="button" onClick={() => updateStatus("cancelled")} disabled={updating}>Cancel</button><button type="button" onClick={deleteBooking} disabled={updating}>{confirmingDelete ? "Click again to delete" : "Delete"}</button></div></>}
-          {selectedMessage && <><h2>{selectedMessage.name}</h2><p>{selectedMessage.email}</p><p>{selectedMessage.phone || "No phone"}</p><p className="detail-message">{selectedMessage.message}</p><div className="detail-actions"><button type="button" onClick={() => updateContactStatus(selectedMessage.id, "resolved")} disabled={updating}>Resolve</button><button type="button" onClick={deleteMessage} disabled={updating}>{confirmingDelete ? "Click again to delete" : "Delete"}</button></div></>}
+          {selectedBooking && <>
+            <h2>{selectedBooking.name}</h2>
+            <p className="detail-subtitle">{selectedBooking.title}</p>
+            <div className="detail-status"><StatusPill status={selectedBooking.status} label={selectedBooking.statusLabel} /></div>
+            <dl className="detail-grid">
+              <DetailField label="Reference" value={selectedBooking.reference} />
+              <DetailField label="Customer email" value={selectedBooking.customerEmail ? <a href={`mailto:${selectedBooking.customerEmail}`}>{selectedBooking.customerEmail}</a> : undefined} />
+              <DetailField label="Customer phone" value={selectedBooking.customerPhone ? <a href={`tel:${selectedBooking.customerPhone}`}>{selectedBooking.customerPhone}</a> : undefined} />
+              <DetailField label="Alternative phone" value={selectedBooking.customerAltPhone ? <a href={`tel:${selectedBooking.customerAltPhone}`}>{selectedBooking.customerAltPhone}</a> : undefined} />
+              <DetailField label="Guests" value={selectedBooking.guests} />
+              <DetailField label="Booking date" value={selectedBooking.date} />
+              <DetailField label="Tour" value={selectedBooking.title} />
+              <DetailField label="Price per person" value={selectedBooking.pricePerPerson !== undefined ? `R ${selectedBooking.pricePerPerson.toLocaleString("en-ZA")}` : undefined} />
+              <DetailField label="Price per night" value={selectedBooking.pricePerNight !== undefined ? `R ${selectedBooking.pricePerNight.toLocaleString("en-ZA")}` : undefined} />
+              <DetailField label="Check-in" value={selectedBooking.checkIn} />
+              <DetailField label="Check-out" value={selectedBooking.checkOut} />
+              <DetailField label="Nights" value={selectedBooking.nights} />
+              <DetailField label="Accommodation" value={selectedBooking.accomTypeLabel || selectedBooking.accomType} />
+              <DetailField label="Estimated total" value={selectedBooking.estimatedTotal !== undefined ? `R ${selectedBooking.estimatedTotal.toLocaleString("en-ZA")}` : selectedBooking.amount} />
+              <DetailField label="Special requests" value={selectedBooking.specialRequests ? <span className="detail-message">{selectedBooking.specialRequests}</span> : undefined} />
+            </dl>
+            <div className="detail-actions"><button type="button" onClick={() => updateStatus("confirmed")} disabled={updating}>Confirm</button><button type="button" onClick={() => updateStatus("cancelled")} disabled={updating}>Cancel</button><button type="button" onClick={deleteBooking} disabled={updating}>{confirmingDelete ? "Click again to delete" : "Delete"}</button></div>
+          </>}
+          {selectedMessage && <>
+            <h2>{selectedMessage.name}</h2>
+            <p className="detail-subtitle">{selectedMessage.reference}</p>
+            <div className="detail-status"><StatusPill status={selectedMessage.status} label={selectedMessage.statusLabel} /></div>
+            <dl className="detail-grid">
+              <DetailField label="Email" value={<a href={`mailto:${selectedMessage.email}`}>{selectedMessage.email}</a>} />
+              <DetailField label="Phone" value={selectedMessage.phone ? <a href={`tel:${selectedMessage.phone}`}>{selectedMessage.phone}</a> : undefined} />
+              <DetailField label="Received" value={selectedMessage.date} />
+              <DetailField label="Message" value={<span className="detail-message">{selectedMessage.message || "No message"}</span>} />
+            </dl>
+            <div className="detail-actions"><button type="button" onClick={() => updateContactStatus(selectedMessage.id, "resolved")} disabled={updating}>Resolve</button><button type="button" onClick={deleteMessage} disabled={updating}>{confirmingDelete ? "Click again to delete" : "Delete"}</button></div>
+          </>}
         </aside>
       </div>}
       {toast && <div className={`admin-toast ${toast.tone}`}>{toast.message}</div>}
@@ -841,8 +895,8 @@ const adminStyles = `
   .admin-content { padding: clamp(16px, 4vw, 42px); } .admin-card { max-width: 1100px; margin: 0 auto; background: #fffdf9; border: 1px solid #ded6c8; border-radius: 10px; overflow: hidden; box-shadow: 0 12px 30px #3927190d; } .admin-card-heading { display: flex; justify-content: space-between; gap: 16px; padding: 22px 24px; border-bottom: 1px solid #ebe5da; } .admin-card h2 { margin: 0; font: 600 1.25rem Georgia, serif; } .admin-card-heading span { color: #756b5d; font-size: .85rem; } .admin-list { padding: 0 20px; } .admin-row { width: 100%; display: grid; grid-template-columns: minmax(150px, 1.4fr) minmax(120px, 1fr) auto auto; align-items: center; gap: 16px; padding: 18px 4px; border: 0; border-bottom: 1px solid #ebe5da; background: transparent; color: inherit; text-align: left; cursor: pointer; font: inherit; } .admin-row:last-child { border-bottom: 0; } .admin-row:hover { background: #faf6ee; } .admin-row span { min-width: 0; } .admin-row strong, .admin-row small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .admin-row small { margin-top: 4px; color: #756b5d; font-size: .8rem; } .row-message { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #756b5d; } .admin-empty { padding: 32px 4px; text-align: center; color: #756b5d; }
   .status-pill { display: inline-flex; justify-content: center; padding: 5px 9px; border-radius: 999px; font-size: .72rem; font-weight: 700; white-space: nowrap; } .status-confirmed { background: #dff3e4; color: #217a36; } .status-pending { background: #fff1c9; color: #8a6410; } .status-cancelled { background: #f9dddd; color: #9d3030; } .status-resolved { background: #dcebf8; color: #28658d; }
   .settings-card { padding: clamp(20px, 4vw, 36px); } .settings-card p { color: #756b5d; } .settings-form { display: grid; gap: 16px; max-width: 560px; } .settings-form label, .admin-login label { display: grid; gap: 6px; font-size: .8rem; font-weight: 700; } .settings-form input, .admin-login input { width: 100%; padding: 12px; border: 1px solid #d8d0c3; border-radius: 6px; font: inherit; } .settings-form button, .admin-login button, .detail-actions button { border: 0; border-radius: 6px; padding: 12px 16px; background: #c9a227; color: #17130d; font-weight: 700; cursor: pointer; } button:disabled { opacity: .55; cursor: not-allowed; }
-  .admin-detail-backdrop, .admin-backdrop { position: fixed; inset: 0; z-index: 10; background: #17130d66; } .admin-detail { position: absolute; right: 0; top: 0; height: 100%; width: min(440px, 100%); overflow: auto; padding: 32px; background: #fffdf9; box-shadow: -12px 0 30px #17130d22; } .detail-close { float: right; border: 0; background: none; font-size: 1.8rem; cursor: pointer; } .detail-message { white-space: pre-wrap; line-height: 1.6; } .detail-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; } .detail-actions button:last-child { background: #f2dada; color: #8f2929; } .admin-toast { position: fixed; right: 20px; bottom: 20px; z-index: 20; padding: 13px 16px; border-radius: 6px; color: #fff; background: #243b28; } .admin-toast.error { background: #8f2929; }
+  .admin-detail-backdrop, .admin-backdrop { position: fixed; inset: 0; z-index: 10; background: #17130db3; } .admin-detail { position: absolute; right: 0; top: 0; height: 100%; height: 100dvh; width: min(440px, 100%); overflow: auto; padding: 32px; background: #fffdf9; box-shadow: -12px 0 30px #17130d22; } .detail-close { float: right; border: 0; background: none; font-size: 1.8rem; cursor: pointer; } .detail-subtitle { margin: 6px 0 18px; color: #756b5d; } .detail-status { margin-bottom: 20px; } .detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 0; } .detail-field { min-width: 0; padding-bottom: 12px; border-bottom: 1px solid #ebe5da; } .detail-field dt { margin-bottom: 5px; color: #756b5d; font-size: .72rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; } .detail-field dd { margin: 0; overflow-wrap: anywhere; line-height: 1.45; } .detail-field a { color: #8a6410; overflow-wrap: anywhere; } .detail-field:last-child { grid-column: 1 / -1; } .detail-message { white-space: pre-wrap; line-height: 1.6; overflow-wrap: anywhere; } .detail-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; } .detail-actions button:last-child { background: #f2dada; color: #8f2929; } .admin-toast { position: fixed; right: 20px; bottom: 20px; z-index: 20; padding: 13px 16px; border-radius: 6px; color: #fff; background: #243b28; } .admin-toast.error { background: #8f2929; }
   .admin-auth, .admin-status { min-height: 100vh; display: grid; place-items: center; padding: 20px; background: #17130d; } .admin-status { color: #fff; } .admin-login { width: min(100%, 380px); display: grid; gap: 16px; padding: 32px; border-radius: 10px; background: #fffdf9; } .admin-login h1 { margin: 0; font: 600 1.4rem Georgia, serif; } .admin-login p { margin: -8px 0 4px; color: #756b5d; } .admin-logo { width: 58px; height: 58px; border-radius: 50%; object-fit: cover; } .admin-error { color: #9d3030; font-size: .85rem; }
-  @media (max-width: 760px) { .admin-sidebar { position: fixed; z-index: 12; left: 0; top: 0; transform: translateX(-100%); transition: transform .2s ease; } .admin-sidebar.is-open { transform: translateX(0); } .admin-menu { display: block; } .admin-topbar { flex-wrap: wrap; } .admin-topbar h1 { flex: 1; } .admin-search { order: 3; flex-basis: 100%; max-width: none; margin: 0; } .admin-user { display: none; } .admin-row { grid-template-columns: 1fr auto; gap: 8px 12px; } .admin-row > :nth-child(2) { grid-column: 1; } .admin-row > :nth-child(3), .admin-row > :nth-child(4) { grid-column: 2; grid-row: 1; } .row-message { grid-column: 1 / -1; } }
-  @media (max-width: 420px) { .admin-content { padding: 10px; } .admin-card-heading, .settings-card { padding: 16px; } .admin-list { padding: 0 12px; } .admin-detail { padding: 24px 18px; } }
+  @media (max-width: 760px) { .admin-sidebar { position: fixed; z-index: 12; left: 0; top: 0; width: min(86vw, 310px); flex-basis: auto; height: 100vh; height: 100dvh; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: max(20px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom)); transform: translateX(-105%); transition: transform .24s ease; box-shadow: 12px 0 30px #17130d55; } .admin-sidebar.is-open { transform: translateX(0); } .admin-menu { display: inline-flex; width: 42px; height: 42px; align-items: center; justify-content: center; border-radius: 6px; color: #17130d; cursor: pointer; } .admin-menu:active { background: #eee7da; } .admin-nav button, .admin-logout { min-height: 48px; } .admin-topbar { flex-wrap: wrap; } .admin-topbar h1 { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; } .admin-search { order: 3; flex-basis: 100%; max-width: none; margin: 0; min-height: 44px; } .admin-user { display: none; } .admin-row { grid-template-columns: 1fr auto; gap: 8px 12px; } .admin-row > :nth-child(2) { grid-column: 1; } .admin-row > :nth-child(3), .admin-row > :nth-child(4) { grid-column: 2; grid-row: 1; } .row-message { grid-column: 1 / -1; } }
+  @media (max-width: 420px) { .admin-content { padding: 10px; } .admin-card-heading, .settings-card { padding: 16px; } .admin-list { padding: 0 12px; } .admin-detail { padding: 24px 18px; } .detail-grid { grid-template-columns: 1fr; gap: 12px; } .detail-field:last-child { grid-column: auto; } .admin-topbar { gap: 10px; padding-inline: 12px; } .admin-topbar h1 { font-size: 1rem; } }
 `;
