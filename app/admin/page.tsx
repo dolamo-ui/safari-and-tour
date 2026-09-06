@@ -11,11 +11,11 @@ import {
 import { db, auth } from "../lib/firebase";
 import { defaultContactSettings, type ContactSettings } from "../lib/siteSettings";
 
-/* ========================================================================   Malikan Tours — Admin Bookings (Tours + Accommodation + Shuttle + Contact)   ======================================================================== */
+/* ========================================================================   Malikan Tours — Admin Bookings (Tours + Accommodation + Contact)   ======================================================================== */
 
 type BookingStatus = "confirmed" | "pending" | "cancelled";
-type BookingType = "tour" | "accommodation" | "shuttle";
-type ViewMode = "all" | "tours" | "accommodation" | "shuttle" | "contact" | "settings";
+type BookingType = "tour" | "accommodation";
+type ViewMode = "all" | "tours" | "accommodation" | "contact" | "settings";
 type ContactStatus = "new" | "read" | "resolved";
 
 type Booking = {
@@ -48,13 +48,6 @@ type Booking = {
   accomType?: string;
   accomTypeLabel?: string;
   pricePerNight?: number;
-  // shuttle specific
-  route?: string;
-  routeLabel?: string;
-  transferDate?: string;
-  transferTime?: string;
-  pickupLocation?: string;
-  dropoffLocation?: string;
 };
 
 type ContactMessage = {
@@ -111,16 +104,6 @@ function BedIcon() {
       <path d="M2 8h18a2 2 0 0 1 2 2v10" />
       <path d="M2 17h20" />
       <path d="M6 8v9" />
-    </svg>
-  );
-}
-
-function ShuttleIcon() {
-  return (
-    <svg width="20" height="20" {...svgBase}>
-      <path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2" />
-      <circle cx="6.5" cy="16.5" r="2.5" />
-      <circle cx="16.5" cy="16.5" r="2.5" />
     </svg>
   );
 }
@@ -358,11 +341,9 @@ export default function AdminBookingsPage() {
   const [view, setView] = useState<ViewMode>("all");
   const [tourBookings, setTourBookings] = useState<Booking[]>([]);
   const [accomBookings, setAccomBookings] = useState<Booking[]>([]);
-  const [shuttleBookings, setShuttleBookings] = useState<Booking[]>([]);
   const [contactMessages, setContactMessages] = useState<ContactMessage[]>([]);
   const [toursLoaded, setToursLoaded] = useState(false);
   const [accomLoaded, setAccomLoaded] = useState(false);
-  const [shuttleLoaded, setShuttleLoaded] = useState(false);
   const [contactLoaded, setContactLoaded] = useState(false);
   const [bookingError, setBookingError] = useState("");
   const [contactError, setContactError] = useState("");
@@ -387,7 +368,7 @@ export default function AdminBookingsPage() {
     return () => clearTimeout(t);
   }, [toast]);
 
-  /* Live Firestore listeners — tours + accommodation + shuttle */
+  /* Live Firestore listeners — tours + accommodation */
   useEffect(() => {
     if (!user) return;
     const unsubTours = onSnapshot(
@@ -479,57 +460,9 @@ export default function AdminBookingsPage() {
       }
     );
 
-    const unsubShuttle = onSnapshot(
-      collection(db, "shuttleBookings"),
-      (snapshot) => {
-        const mapped = snapshot.docs.map((d) => {
-          const data = d.data();
-          const name = typeof data.customerName === "string" ? data.customerName : "Unknown customer";
-          const status = data.status === "confirmed" || data.status === "cancelled" ? data.status : "pending";
-          const amount = typeof data.estimatedTotal === "number" ? `R ${data.estimatedTotal.toLocaleString("en-ZA")}` : "—";
-          const rawDate = typeof data.transferDate === "string" ? data.transferDate : "";
-          return {
-            id: d.id,
-            type: "shuttle" as const,
-            initials: name.split(" ").map((p: string) => p[0] ?? "").join("").slice(0, 2).toUpperCase(),
-            avatarGradient: "linear-gradient(135deg, #3568b3, #59a5e6)",
-            name,
-            title: typeof data.routeLabel === "string" ? data.routeLabel : "Shuttle Transfer",
-            date: rawDate ? new Date(rawDate).toLocaleDateString("en-ZA", { day: "numeric", month: "short", year: "numeric" }) : "—",
-            status,
-            statusLabel: status.charAt(0).toUpperCase() + status.slice(1),
-            amount,
-            rawDate,
-            reference: typeof data.reference === "string" ? data.reference : undefined,
-            guests: typeof data.passengers === "number" ? data.passengers : undefined,
-            customerPhone: typeof data.customerPhone === "string" ? data.customerPhone : undefined,
-            customerEmail: typeof data.customerEmail === "string" ? data.customerEmail : undefined,
-            specialRequests: typeof data.specialRequests === "string" ? data.specialRequests : undefined,
-            createdAt: data.createdAt,
-            route: typeof data.route === "string" ? data.route : undefined,
-            routeLabel: typeof data.routeLabel === "string" ? data.routeLabel : undefined,
-            transferDate: typeof data.transferDate === "string" ? data.transferDate : undefined,
-            transferTime: typeof data.transferTime === "string" ? data.transferTime : undefined,
-            pickupLocation: typeof data.pickupLocation === "string" ? data.pickupLocation : undefined,
-            dropoffLocation: typeof data.dropoffLocation === "string" ? data.dropoffLocation : undefined,
-            pricePerPerson: typeof data.pricePerPerson === "number" ? data.pricePerPerson : undefined,
-            estimatedTotal: typeof data.estimatedTotal === "number" ? data.estimatedTotal : undefined,
-          };
-        }).sort((a, b) => b.rawDate.localeCompare(a.rawDate));
-        setShuttleBookings(mapped);
-        setShuttleLoaded(true);
-      },
-      (err) => {
-        console.error(err);
-        setBookingError("Could not load shuttle bookings. Check Firebase rules.");
-        setShuttleLoaded(true);
-      }
-    );
-
     return () => {
       unsubTours();
       unsubAccom();
-      unsubShuttle();
     };
   }, [user]);
 
@@ -601,9 +534,8 @@ export default function AdminBookingsPage() {
   const activeBookings = useMemo(() => {
     if (view === "tours") return tourBookings;
     if (view === "accommodation") return accomBookings;
-    if (view === "shuttle") return shuttleBookings;
-    return [...tourBookings, ...accomBookings, ...shuttleBookings].sort((a, b) => b.rawDate.localeCompare(a.rawDate));
-  }, [view, tourBookings, accomBookings, shuttleBookings]);
+    return [...tourBookings, ...accomBookings].sort((a, b) => b.rawDate.localeCompare(a.rawDate));
+  }, [view, tourBookings, accomBookings]);
 
   /* Stats from active booking list */
   const stats = useMemo(() => {
@@ -635,9 +567,8 @@ export default function AdminBookingsPage() {
   const bookingsLoading = useMemo(() => {
     if (view === "tours") return !toursLoaded;
     if (view === "accommodation") return !accomLoaded;
-    if (view === "shuttle") return !shuttleLoaded;
-    return !(toursLoaded && accomLoaded && shuttleLoaded);
-  }, [view, toursLoaded, accomLoaded, shuttleLoaded]);
+    return !(toursLoaded && accomLoaded);
+  }, [view, toursLoaded, accomLoaded]);
 
   /* Search filter — bookings */
   const filteredBookings = useMemo(() => {
@@ -650,8 +581,7 @@ export default function AdminBookingsPage() {
         b.date.toLowerCase().includes(q) ||
         b.statusLabel.toLowerCase().includes(q) ||
         (b.reference && b.reference.toLowerCase().includes(q)) ||
-        (b.pickupLocation && b.pickupLocation.toLowerCase().includes(q)) ||
-        (b.dropoffLocation && b.dropoffLocation.toLowerCase().includes(q))
+        false
     );
   }, [activeBookings, searchQuery]);
 
@@ -702,7 +632,7 @@ export default function AdminBookingsPage() {
 
   /* Map a booking type to its Firestore collection name */
   const collectionFor = (type: BookingType) =>
-    type === "tour" ? "bookings" : type === "accommodation" ? "accommodationBookings" : "shuttleBookings";
+    type === "tour" ? "bookings" : "accommodationBookings";
 
   /* Update booking status */
   const updateStatus = async (newStatus: BookingStatus) => {
@@ -800,5 +730,119 @@ export default function AdminBookingsPage() {
       setUpdating(false);
       setConfirmingDelete(false);
     }
- }
+  };
+
+  if (authLoading) {
+    return <div className="admin-status">Loading admin...</div>;
+  }
+
+  if (!user) {
+    return (
+      <main className="admin-auth">
+        <form className="admin-login" onSubmit={handleLogin}>
+          <img src="/logo.jpg" alt="Malikan Tours" className="admin-logo" />
+          <h1>Malikan Tours Admin</h1>
+          <p>Sign in to manage bookings and contact settings.</p>
+          <label>Email<input type="email" value={loginEmail} onChange={(event) => setLoginEmail(event.target.value)} required /></label>
+          <label>Password<input type="password" value={loginPassword} onChange={(event) => setLoginPassword(event.target.value)} required /></label>
+          {loginError && <strong className="admin-error">{loginError}</strong>}
+          <button type="submit" disabled={loginSubmitting}>{loginSubmitting ? "Signing in..." : "Sign in"}</button>
+        </form>
+        <style jsx>{adminStyles}</style>
+      </main>
+    );
+  }
+
+  const title = view === "all" ? "All Bookings" : view === "tours" ? "Tour Bookings" : view === "accommodation" ? "Accommodation" : view === "contact" ? "Contact Messages" : "Site Settings";
+  const chooseView = (nextView: ViewMode) => {
+    setView(nextView);
+    setSidebarOpen(false);
+    setSearchQuery("");
+  };
+
+  return (
+    <div className="admin-shell">
+      <aside className={`admin-sidebar ${sidebarOpen ? "is-open" : ""}`}>
+        <div className="admin-brand"><img src="/logo.jpg" alt="" /><span>Malikan Tours<small>Admin</small></span></div>
+        <nav className="admin-nav" aria-label="Admin navigation">
+          {([ ["all", "All Bookings"], ["tours", "Tour Bookings"], ["accommodation", "Accommodation"], ["contact", "Contact Messages"], ["settings", "Site Settings"] ] as const).map(([key, label]) => (
+            <button key={key} className={view === key ? "active" : ""} onClick={() => chooseView(key)} type="button">{label}</button>
+          ))}
+        </nav>
+        <button className="admin-logout" type="button" onClick={handleLogout}>Log out</button>
+      </aside>
+      {sidebarOpen && <button className="admin-backdrop" type="button" aria-label="Close menu" onClick={() => setSidebarOpen(false)} />}
+
+      <main className="admin-main">
+        <header className="admin-topbar">
+          <button className="admin-menu" type="button" onClick={() => setSidebarOpen((open) => !open)} aria-label="Open admin menu">☰</button>
+          <h1>{title}</h1>
+          {view !== "settings" && <input className="admin-search" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} placeholder="Search..." aria-label="Search" />}
+          <span className="admin-user">{user.email}</span>
+        </header>
+
+        <section className="admin-content">
+          {view === "settings" ? (
+            <article className="admin-card settings-card">
+              <h2>Contact phone numbers</h2>
+              <p>These numbers appear across the public website.</p>
+              <form onSubmit={saveContactSettings} className="settings-form">
+                <label>Primary phone<input type="tel" value={contactSettings.phone} onChange={(event) => setContactSettings((current) => ({ ...current, phone: event.target.value }))} required /></label>
+                <label>Alternative phone<input type="tel" value={contactSettings.alternativePhone} onChange={(event) => setContactSettings((current) => ({ ...current, alternativePhone: event.target.value }))} /></label>
+                <button type="submit" disabled={!settingsLoaded || settingsSaving}>{settingsSaving ? "Saving..." : "Save phone numbers"}</button>
+              </form>
+            </article>
+          ) : view === "contact" ? (
+            <article className="admin-card">
+              <div className="admin-card-heading"><h2>Contact messages</h2><span>{filteredMessages.length} messages</span></div>
+              <div className="admin-list">
+                {filteredMessages.map((message) => <button className="admin-row" key={message.id} type="button" onClick={() => openMessageDetail(message)}>
+                  <span><strong>{message.name}</strong><small>{message.email}</small></span><span className="row-message">{message.message || "No message"}</span><StatusPill status={message.status} label={message.statusLabel} />
+                </button>)}
+                {contactLoaded && filteredMessages.length === 0 && <p className="admin-empty">{contactError || "No contact messages found."}</p>}
+              </div>
+            </article>
+          ) : (
+            <article className="admin-card">
+              <div className="admin-card-heading"><h2>{title}</h2><span>{filteredBookings.length} bookings</span></div>
+              <div className="admin-list">
+                {filteredBookings.map((booking) => <button className="admin-row" key={`${booking.type}-${booking.id}`} type="button" onClick={() => openDetail(booking)}>
+                  <span><strong>{booking.name}</strong><small>{booking.title}</small></span><span>{booking.date}</span><span>{booking.amount}</span><StatusPill status={booking.status} label={booking.statusLabel} />
+                </button>)}
+                {bookingsLoading && <p className="admin-empty">Loading bookings...</p>}
+                {!bookingsLoading && filteredBookings.length === 0 && <p className="admin-empty">{bookingError || "No bookings found."}</p>}
+              </div>
+            </article>
+          )}
+        </section>
+      </main>
+
+      {detailOpen && (selectedBooking || selectedMessage) && <div className="admin-detail-backdrop" onClick={closeDetail}>
+        <aside className="admin-detail" onClick={(event) => event.stopPropagation()}>
+          <button className="detail-close" type="button" onClick={closeDetail} aria-label="Close details">×</button>
+          {selectedBooking && <><h2>{selectedBooking.name}</h2><p>{selectedBooking.title}</p><p>{selectedBooking.customerEmail || "No email"}</p><p>{selectedBooking.customerPhone || "No phone"}</p><StatusPill status={selectedBooking.status} label={selectedBooking.statusLabel} /><div className="detail-actions"><button type="button" onClick={() => updateStatus("confirmed")} disabled={updating}>Confirm</button><button type="button" onClick={() => updateStatus("cancelled")} disabled={updating}>Cancel</button><button type="button" onClick={deleteBooking} disabled={updating}>{confirmingDelete ? "Click again to delete" : "Delete"}</button></div></>}
+          {selectedMessage && <><h2>{selectedMessage.name}</h2><p>{selectedMessage.email}</p><p>{selectedMessage.phone || "No phone"}</p><p className="detail-message">{selectedMessage.message}</p><div className="detail-actions"><button type="button" onClick={() => updateContactStatus(selectedMessage.id, "resolved")} disabled={updating}>Resolve</button><button type="button" onClick={deleteMessage} disabled={updating}>{confirmingDelete ? "Click again to delete" : "Delete"}</button></div></>}
+        </aside>
+      </div>}
+      {toast && <div className={`admin-toast ${toast.tone}`}>{toast.message}</div>}
+      <style jsx>{adminStyles}</style>
+    </div>
+  );
 }
+
+const adminStyles = `
+  :global(*) { box-sizing: border-box; }
+  :global(body) { margin: 0; background: #f5f1e9; color: #201b14; }
+  .admin-shell { min-height: 100vh; display: flex; background: #f5f1e9; }
+  .admin-sidebar { width: 250px; flex: 0 0 250px; min-height: 100vh; padding: 24px 16px; background: #17130d; color: #fff; display: flex; flex-direction: column; gap: 28px; position: sticky; top: 0; }
+  .admin-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; } .admin-brand img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; } .admin-brand small { display: block; color: #c9a227; font-size: .72rem; margin-top: 3px; }
+  .admin-nav { display: grid; gap: 6px; } .admin-nav button, .admin-logout { border: 0; border-radius: 7px; padding: 12px; background: transparent; color: #c9c2b4; text-align: left; cursor: pointer; font: inherit; } .admin-nav button:hover, .admin-nav button.active { color: #17130d; background: #c9a227; } .admin-logout { margin-top: auto; border-top: 1px solid #ffffff1c; border-radius: 0; padding-top: 20px; }
+  .admin-main { min-width: 0; flex: 1; } .admin-topbar { min-height: 76px; padding: 16px clamp(16px, 4vw, 42px); display: flex; align-items: center; gap: 16px; background: #fffdf9; border-bottom: 1px solid #ded6c8; } .admin-topbar h1 { margin: 0; font: 600 clamp(1.1rem, 2vw, 1.45rem)/1.2 Georgia, serif; white-space: nowrap; } .admin-search { min-width: 120px; flex: 1; max-width: 360px; margin-left: auto; padding: 11px 14px; border: 1px solid #d8d0c3; border-radius: 6px; background: #fff; } .admin-user { max-width: 190px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .8rem; color: #756b5d; } .admin-menu { display: none; border: 0; background: none; font-size: 1.4rem; }
+  .admin-content { padding: clamp(16px, 4vw, 42px); } .admin-card { max-width: 1100px; margin: 0 auto; background: #fffdf9; border: 1px solid #ded6c8; border-radius: 10px; overflow: hidden; box-shadow: 0 12px 30px #3927190d; } .admin-card-heading { display: flex; justify-content: space-between; gap: 16px; padding: 22px 24px; border-bottom: 1px solid #ebe5da; } .admin-card h2 { margin: 0; font: 600 1.25rem Georgia, serif; } .admin-card-heading span { color: #756b5d; font-size: .85rem; } .admin-list { padding: 0 20px; } .admin-row { width: 100%; display: grid; grid-template-columns: minmax(150px, 1.4fr) minmax(120px, 1fr) auto auto; align-items: center; gap: 16px; padding: 18px 4px; border: 0; border-bottom: 1px solid #ebe5da; background: transparent; color: inherit; text-align: left; cursor: pointer; font: inherit; } .admin-row:last-child { border-bottom: 0; } .admin-row:hover { background: #faf6ee; } .admin-row span { min-width: 0; } .admin-row strong, .admin-row small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .admin-row small { margin-top: 4px; color: #756b5d; font-size: .8rem; } .row-message { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #756b5d; } .admin-empty { padding: 32px 4px; text-align: center; color: #756b5d; }
+  .status-pill { display: inline-flex; justify-content: center; padding: 5px 9px; border-radius: 999px; font-size: .72rem; font-weight: 700; white-space: nowrap; } .status-confirmed { background: #dff3e4; color: #217a36; } .status-pending { background: #fff1c9; color: #8a6410; } .status-cancelled { background: #f9dddd; color: #9d3030; } .status-resolved { background: #dcebf8; color: #28658d; }
+  .settings-card { padding: clamp(20px, 4vw, 36px); } .settings-card p { color: #756b5d; } .settings-form { display: grid; gap: 16px; max-width: 560px; } .settings-form label, .admin-login label { display: grid; gap: 6px; font-size: .8rem; font-weight: 700; } .settings-form input, .admin-login input { width: 100%; padding: 12px; border: 1px solid #d8d0c3; border-radius: 6px; font: inherit; } .settings-form button, .admin-login button, .detail-actions button { border: 0; border-radius: 6px; padding: 12px 16px; background: #c9a227; color: #17130d; font-weight: 700; cursor: pointer; } button:disabled { opacity: .55; cursor: not-allowed; }
+  .admin-detail-backdrop, .admin-backdrop { position: fixed; inset: 0; z-index: 10; background: #17130d66; } .admin-detail { position: absolute; right: 0; top: 0; height: 100%; width: min(440px, 100%); overflow: auto; padding: 32px; background: #fffdf9; box-shadow: -12px 0 30px #17130d22; } .detail-close { float: right; border: 0; background: none; font-size: 1.8rem; cursor: pointer; } .detail-message { white-space: pre-wrap; line-height: 1.6; } .detail-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; } .detail-actions button:last-child { background: #f2dada; color: #8f2929; } .admin-toast { position: fixed; right: 20px; bottom: 20px; z-index: 20; padding: 13px 16px; border-radius: 6px; color: #fff; background: #243b28; } .admin-toast.error { background: #8f2929; }
+  .admin-auth, .admin-status { min-height: 100vh; display: grid; place-items: center; padding: 20px; background: #17130d; } .admin-status { color: #fff; } .admin-login { width: min(100%, 380px); display: grid; gap: 16px; padding: 32px; border-radius: 10px; background: #fffdf9; } .admin-login h1 { margin: 0; font: 600 1.4rem Georgia, serif; } .admin-login p { margin: -8px 0 4px; color: #756b5d; } .admin-logo { width: 58px; height: 58px; border-radius: 50%; object-fit: cover; } .admin-error { color: #9d3030; font-size: .85rem; }
+  @media (max-width: 760px) { .admin-sidebar { position: fixed; z-index: 12; left: 0; top: 0; transform: translateX(-100%); transition: transform .2s ease; } .admin-sidebar.is-open { transform: translateX(0); } .admin-menu { display: block; } .admin-topbar { flex-wrap: wrap; } .admin-topbar h1 { flex: 1; } .admin-search { order: 3; flex-basis: 100%; max-width: none; margin: 0; } .admin-user { display: none; } .admin-row { grid-template-columns: 1fr auto; gap: 8px 12px; } .admin-row > :nth-child(2) { grid-column: 1; } .admin-row > :nth-child(3), .admin-row > :nth-child(4) { grid-column: 2; grid-row: 1; } .row-message { grid-column: 1 / -1; } }
+  @media (max-width: 420px) { .admin-content { padding: 10px; } .admin-card-heading, .settings-card { padding: 16px; } .admin-list { padding: 0 12px; } .admin-detail { padding: 24px 18px; } }
+`;
