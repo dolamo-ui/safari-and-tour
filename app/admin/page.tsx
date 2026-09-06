@@ -783,8 +783,19 @@ export default function AdminBookingsPage() {
 
   return (
     <div className="admin-shell">
-      <aside className={`admin-sidebar ${sidebarOpen ? "is-open" : ""}`}>
-        <div className="admin-brand"><img src="/logo.jpg" alt="" /><span>Malikan Tours<small>Admin</small></span></div>
+      <aside id="admin-sidebar" className={`admin-sidebar ${sidebarOpen ? "is-open" : ""}`}>
+        <div className="admin-brand">
+          <img src="/logo.jpg" alt="" />
+          <span>Malikan Tours<small>Admin</small></span>
+          <button
+            className="admin-sidebar-close"
+            type="button"
+            onClick={() => setSidebarOpen(false)}
+            aria-label="Close menu"
+          >
+            ×
+          </button>
+        </div>
         <nav className="admin-nav" aria-label="Admin navigation">
           {([ ["all", "All Bookings"], ["tours", "Tour Bookings"], ["accommodation", "Accommodation"], ["contact", "Contact Messages"], ["settings", "Site Settings"] ] as const).map(([key, label]) => (
             <button key={key} className={view === key ? "active" : ""} onClick={() => chooseView(key)} type="button">{label}</button>
@@ -792,11 +803,27 @@ export default function AdminBookingsPage() {
         </nav>
         <button className="admin-logout" type="button" onClick={handleLogout}>Log out</button>
       </aside>
-      {sidebarOpen && <button className="admin-backdrop" type="button" aria-label="Close menu" onClick={() => setSidebarOpen(false)} />}
+      {sidebarOpen && (
+        <button
+          className="admin-backdrop"
+          type="button"
+          aria-label="Close menu"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
       <main className="admin-main">
         <header className="admin-topbar">
-          <button className="admin-menu" type="button" onClick={() => setSidebarOpen((open) => !open)} aria-label="Open admin menu">☰</button>
+          <button
+            className="admin-menu"
+            type="button"
+            onClick={() => setSidebarOpen((open) => !open)}
+            aria-label="Open admin menu"
+            aria-expanded={sidebarOpen}
+            aria-controls="admin-sidebar"
+          >
+            ☰
+          </button>
           <h1>{title}</h1>
           {view !== "settings" && <input className="admin-search" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} placeholder="Search..." aria-label="Search" />}
           <span className="admin-user">{user.email}</span>
@@ -885,18 +912,50 @@ export default function AdminBookingsPage() {
 }
 
 const adminStyles = `
-  :global(*) { box-sizing: border-box; }
-  :global(body) { margin: 0; background: #f5f1e9; color: #201b14; }
-  .admin-shell { min-height: 100vh; display: flex; background: #f5f1e9; }
+  :global(*) { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  :global(html) { overflow-x: hidden; }
+  :global(body) { margin: 0; background: #f5f1e9; color: #201b14; overflow-x: hidden; }
+  .admin-shell { min-height: 100vh; display: flex; background: #f5f1e9; overflow-x: hidden; }
   .admin-sidebar { width: 250px; flex: 0 0 250px; min-height: 100vh; padding: 24px 16px; background: #17130d; color: #fff; display: flex; flex-direction: column; gap: 28px; position: sticky; top: 0; }
-  .admin-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; } .admin-brand img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; } .admin-brand small { display: block; color: #c9a227; font-size: .72rem; margin-top: 3px; }
-  .admin-nav { display: grid; gap: 6px; } .admin-nav button, .admin-logout { border: 0; border-radius: 7px; padding: 12px; background: transparent; color: #c9c2b4; text-align: left; cursor: pointer; font: inherit; } .admin-nav button:hover, .admin-nav button.active { color: #17130d; background: #c9a227; } .admin-logout { margin-top: auto; border-top: 1px solid #ffffff1c; border-radius: 0; padding-top: 20px; }
-  .admin-main { min-width: 0; flex: 1; } .admin-topbar { min-height: 76px; padding: 16px clamp(16px, 4vw, 42px); display: flex; align-items: center; gap: 16px; background: #fffdf9; border-bottom: 1px solid #ded6c8; } .admin-topbar h1 { margin: 0; font: 600 clamp(1.1rem, 2vw, 1.45rem)/1.2 Georgia, serif; white-space: nowrap; } .admin-search { min-width: 120px; flex: 1; max-width: 360px; margin-left: auto; padding: 11px 14px; border: 1px solid #d8d0c3; border-radius: 6px; background: #fff; } .admin-user { max-width: 190px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .8rem; color: #756b5d; } .admin-menu { display: none; border: 0; background: none; font-size: 1.4rem; }
-  .admin-content { padding: clamp(16px, 4vw, 42px); } .admin-card { max-width: 1100px; margin: 0 auto; background: #fffdf9; border: 1px solid #ded6c8; border-radius: 10px; overflow: hidden; box-shadow: 0 12px 30px #3927190d; } .admin-card-heading { display: flex; justify-content: space-between; gap: 16px; padding: 22px 24px; border-bottom: 1px solid #ebe5da; } .admin-card h2 { margin: 0; font: 600 1.25rem Georgia, serif; } .admin-card-heading span { color: #756b5d; font-size: .85rem; } .admin-list { padding: 0 20px; } .admin-row { width: 100%; display: grid; grid-template-columns: minmax(150px, 1.4fr) minmax(120px, 1fr) auto auto; align-items: center; gap: 16px; padding: 18px 4px; border: 0; border-bottom: 1px solid #ebe5da; background: transparent; color: inherit; text-align: left; cursor: pointer; font: inherit; } .admin-row:last-child { border-bottom: 0; } .admin-row:hover { background: #faf6ee; } .admin-row span { min-width: 0; } .admin-row strong, .admin-row small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .admin-row small { margin-top: 4px; color: #756b5d; font-size: .8rem; } .row-message { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #756b5d; } .admin-empty { padding: 32px 4px; text-align: center; color: #756b5d; }
+  .admin-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; } .admin-brand img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; flex-shrink: 0; } .admin-brand span { min-width: 0; overflow: hidden; text-overflow: ellipsis; } .admin-brand small { display: block; color: #c9a227; font-size: .72rem; margin-top: 3px; }
+  .admin-sidebar-close { display: none; }
+  .admin-nav { display: grid; gap: 6px; } .admin-nav button, .admin-logout { border: 0; border-radius: 7px; padding: 12px; background: transparent; color: #c9c2b4; text-align: left; cursor: pointer; font: inherit; touch-action: manipulation; } .admin-nav button:hover, .admin-nav button.active { color: #17130d; background: #c9a227; } .admin-nav button:focus-visible, .admin-logout:focus-visible, .admin-menu:focus-visible, .admin-sidebar-close:focus-visible { outline: 2px solid #c9a227; outline-offset: 2px; } .admin-logout { margin-top: auto; border-top: 1px solid #ffffff1c; border-radius: 0; padding-top: 20px; }
+  .admin-main { min-width: 0; flex: 1; } .admin-topbar { min-height: 76px; padding: 16px clamp(16px, 4vw, 42px); display: flex; align-items: center; gap: 16px; background: #fffdf9; border-bottom: 1px solid #ded6c8; } .admin-topbar h1 { margin: 0; font: 600 clamp(1.1rem, 2vw, 1.45rem)/1.2 Georgia, serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .admin-search { min-width: 0; flex: 1; max-width: 360px; margin-left: auto; padding: 11px 14px; border: 1px solid #d8d0c3; border-radius: 6px; background: #fff; } .admin-user { max-width: 190px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .8rem; color: #756b5d; flex-shrink: 0; } .admin-menu { display: none; border: 0; background: none; border-radius: 8px; width: 42px; height: 42px; align-items: center; justify-content: center; font-size: 1.4rem; cursor: pointer; touch-action: manipulation; flex-shrink: 0; }
+  .admin-content { padding: clamp(16px, 4vw, 42px); } .admin-card { max-width: 1100px; margin: 0 auto; background: #fffdf9; border: 1px solid #ded6c8; border-radius: 10px; overflow: hidden; box-shadow: 0 12px 30px #3927190d; } .admin-card-heading { display: flex; justify-content: space-between; gap: 16px; padding: 22px 24px; border-bottom: 1px solid #ebe5da; } .admin-card h2 { margin: 0; font: 600 1.25rem Georgia, serif; } .admin-card-heading span { color: #756b5d; font-size: .85rem; flex-shrink: 0; } .admin-list { padding: 0 20px; } .admin-row { width: 100%; display: grid; grid-template-columns: minmax(150px, 1.4fr) minmax(120px, 1fr) auto auto; align-items: center; gap: 16px; padding: 18px 4px; border: 0; border-bottom: 1px solid #ebe5da; background: transparent; color: inherit; text-align: left; cursor: pointer; font: inherit; touch-action: manipulation; } .admin-row:last-child { border-bottom: 0; } .admin-row:hover { background: #faf6ee; } .admin-row span { min-width: 0; } .admin-row strong, .admin-row small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .admin-row small { margin-top: 4px; color: #756b5d; font-size: .8rem; } .row-message { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #756b5d; } .admin-empty { padding: 32px 4px; text-align: center; color: #756b5d; }
   .status-pill { display: inline-flex; justify-content: center; padding: 5px 9px; border-radius: 999px; font-size: .72rem; font-weight: 700; white-space: nowrap; } .status-confirmed { background: #dff3e4; color: #217a36; } .status-pending { background: #fff1c9; color: #8a6410; } .status-cancelled { background: #f9dddd; color: #9d3030; } .status-resolved { background: #dcebf8; color: #28658d; }
-  .settings-card { padding: clamp(20px, 4vw, 36px); } .settings-card p { color: #756b5d; } .settings-form { display: grid; gap: 16px; max-width: 560px; } .settings-form label, .admin-login label { display: grid; gap: 6px; font-size: .8rem; font-weight: 700; } .settings-form input, .admin-login input { width: 100%; padding: 12px; border: 1px solid #d8d0c3; border-radius: 6px; font: inherit; } .settings-form button, .admin-login button, .detail-actions button { border: 0; border-radius: 6px; padding: 12px 16px; background: #c9a227; color: #17130d; font-weight: 700; cursor: pointer; } button:disabled { opacity: .55; cursor: not-allowed; }
-  .admin-detail-backdrop, .admin-backdrop { position: fixed; inset: 0; z-index: 10; background: #17130db3; } .admin-detail { position: absolute; right: 0; top: 0; height: 100%; height: 100dvh; width: min(440px, 100%); overflow: auto; padding: 32px; background: #fffdf9; box-shadow: -12px 0 30px #17130d22; } .detail-close { float: right; border: 0; background: none; font-size: 1.8rem; cursor: pointer; } .detail-subtitle { margin: 6px 0 18px; color: #756b5d; } .detail-status { margin-bottom: 20px; } .detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 0; } .detail-field { min-width: 0; padding-bottom: 12px; border-bottom: 1px solid #ebe5da; } .detail-field dt { margin-bottom: 5px; color: #756b5d; font-size: .72rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; } .detail-field dd { margin: 0; overflow-wrap: anywhere; line-height: 1.45; } .detail-field a { color: #8a6410; overflow-wrap: anywhere; } .detail-field:last-child { grid-column: 1 / -1; } .detail-message { white-space: pre-wrap; line-height: 1.6; overflow-wrap: anywhere; } .detail-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; } .detail-actions button:last-child { background: #f2dada; color: #8f2929; } .admin-toast { position: fixed; right: 20px; bottom: 20px; z-index: 20; padding: 13px 16px; border-radius: 6px; color: #fff; background: #243b28; } .admin-toast.error { background: #8f2929; }
+  .settings-card { padding: clamp(20px, 4vw, 36px); } .settings-card p { color: #756b5d; } .settings-form { display: grid; gap: 16px; max-width: 560px; } .settings-form label, .admin-login label { display: grid; gap: 6px; font-size: .8rem; font-weight: 700; } .settings-form input, .admin-login input { width: 100%; padding: 12px; border: 1px solid #d8d0c3; border-radius: 6px; font: inherit; } .settings-form button, .admin-login button, .detail-actions button { border: 0; border-radius: 6px; padding: 12px 16px; background: #c9a227; color: #17130d; font-weight: 700; cursor: pointer; touch-action: manipulation; } button:disabled { opacity: .55; cursor: not-allowed; }
+  .admin-detail-backdrop, .admin-backdrop { position: fixed; inset: 0; background: #17130db3; animation: admin-fade .18s ease; } .admin-backdrop { z-index: 14; border: 0; padding: 0; cursor: pointer; } .admin-detail-backdrop { z-index: 30; } .admin-detail { position: absolute; right: 0; top: 0; height: 100%; height: 100dvh; width: min(440px, 100%); overflow: auto; padding: 32px; background: #fffdf9; box-shadow: -12px 0 30px #17130d22; } .detail-close { float: right; border: 0; background: none; font-size: 1.8rem; cursor: pointer; touch-action: manipulation; } .detail-subtitle { margin: 6px 0 18px; color: #756b5d; } .detail-status { margin-bottom: 20px; } .detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 0; } .detail-field { min-width: 0; padding-bottom: 12px; border-bottom: 1px solid #ebe5da; } .detail-field dt { margin-bottom: 5px; color: #756b5d; font-size: .72rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; } .detail-field dd { margin: 0; overflow-wrap: anywhere; line-height: 1.45; } .detail-field a { color: #8a6410; overflow-wrap: anywhere; } .detail-field:last-child { grid-column: 1 / -1; } .detail-message { white-space: pre-wrap; line-height: 1.6; overflow-wrap: anywhere; } .detail-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; } .detail-actions button:last-child { background: #f2dada; color: #8f2929; } .admin-toast { position: fixed; right: 20px; bottom: 20px; z-index: 40; padding: 13px 16px; border-radius: 6px; color: #fff; background: #243b28; } .admin-toast.error { background: #8f2929; }
   .admin-auth, .admin-status { min-height: 100vh; display: grid; place-items: center; padding: 20px; background: #17130d; } .admin-status { color: #fff; } .admin-login { width: min(100%, 380px); display: grid; gap: 16px; padding: 32px; border-radius: 10px; background: #fffdf9; } .admin-login h1 { margin: 0; font: 600 1.4rem Georgia, serif; } .admin-login p { margin: -8px 0 4px; color: #756b5d; } .admin-logo { width: 58px; height: 58px; border-radius: 50%; object-fit: cover; } .admin-error { color: #9d3030; font-size: .85rem; }
-  @media (max-width: 760px) { .admin-sidebar { position: fixed; z-index: 12; left: 0; top: 0; width: min(86vw, 310px); flex-basis: auto; height: 100vh; height: 100dvh; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: max(20px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom)); transform: translateX(-105%); transition: transform .24s ease; box-shadow: 12px 0 30px #17130d55; } .admin-sidebar.is-open { transform: translateX(0); } .admin-menu { display: inline-flex; width: 42px; height: 42px; align-items: center; justify-content: center; border-radius: 6px; color: #17130d; cursor: pointer; } .admin-menu:active { background: #eee7da; } .admin-nav button, .admin-logout { min-height: 48px; } .admin-topbar { flex-wrap: wrap; } .admin-topbar h1 { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; } .admin-search { order: 3; flex-basis: 100%; max-width: none; margin: 0; min-height: 44px; } .admin-user { display: none; } .admin-row { grid-template-columns: 1fr auto; gap: 8px 12px; } .admin-row > :nth-child(2) { grid-column: 1; } .admin-row > :nth-child(3), .admin-row > :nth-child(4) { grid-column: 2; grid-row: 1; } .row-message { grid-column: 1 / -1; } }
-  @media (max-width: 420px) { .admin-content { padding: 10px; } .admin-card-heading, .settings-card { padding: 16px; } .admin-list { padding: 0 12px; } .admin-detail { padding: 24px 18px; } .detail-grid { grid-template-columns: 1fr; gap: 12px; } .detail-field:last-child { grid-column: auto; } .admin-topbar { gap: 10px; padding-inline: 12px; } .admin-topbar h1 { font-size: 1rem; } }
+  @keyframes admin-fade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes admin-slide-in { from { transform: translateX(-105%); } to { transform: translateX(0); } }
+  @media (max-width: 880px) {
+    .admin-sidebar { position: fixed; z-index: 15; left: 0; top: 0; width: min(86vw, 310px); flex-basis: auto; height: 100vh; height: 100dvh; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: max(20px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom)); transform: translateX(-105%); transition: transform .24s ease; box-shadow: 12px 0 30px #17130d55; }
+    .admin-sidebar.is-open { transform: translateX(0); }
+    .admin-sidebar-close { display: inline-flex; align-items: center; justify-content: center; margin-left: auto; width: 34px; height: 34px; flex-shrink: 0; border: 0; border-radius: 8px; background: rgba(255,255,255,.08); color: #fff; font-size: 1.4rem; line-height: 1; cursor: pointer; touch-action: manipulation; }
+    .admin-menu { display: inline-flex; }
+    .admin-menu:active, .admin-sidebar-close:active { background: rgba(0,0,0,.08); }
+    .admin-nav button, .admin-logout { min-height: 48px; }
+    .admin-topbar { flex-wrap: wrap; }
+    .admin-topbar h1 { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+    .admin-search { order: 3; flex-basis: 100%; max-width: none; margin: 0; min-height: 44px; }
+    .admin-user { display: none; }
+    .admin-row { grid-template-columns: 1fr auto; gap: 8px 12px; }
+    .admin-row > :nth-child(2) { grid-column: 1; }
+    .admin-row > :nth-child(3), .admin-row > :nth-child(4) { grid-column: 2; grid-row: 1; }
+    .row-message { grid-column: 1 / -1; }
+  }
+  @media (max-width: 480px) {
+    .admin-content { padding: 10px; }
+    .admin-card-heading, .settings-card { padding: 16px; }
+    .admin-list { padding: 0 12px; }
+    .admin-detail { padding: 24px 18px; width: 100%; }
+    .detail-grid { grid-template-columns: 1fr; gap: 12px; }
+    .detail-field:last-child { grid-column: auto; }
+    .admin-topbar { gap: 10px; padding-inline: 12px; }
+    .admin-topbar h1 { font-size: 1rem; }
+    .detail-actions button { flex: 1 1 auto; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .admin-sidebar, .admin-backdrop, .admin-detail-backdrop { animation: none !important; transition: none !important; }
+  }
 `;
